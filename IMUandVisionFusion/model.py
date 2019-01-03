@@ -32,21 +32,26 @@ class ConvLSTM(nn.Module):
         super(ConvLSTM, self).__init__()
 
         self.conv1 = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
+            nn.Conv2d(in_channels=1, out_channels=NUM_FILTERS, kernel_size=(12, FILTER_SIZE)),
             nn.ReLU())
         self.conv2 = nn.Sequential(
-            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
+            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(12, FILTER_SIZE)),
             nn.ReLU())
         self.conv3 = nn.Sequential(
-            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
+            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(2, FILTER_SIZE)),
             nn.ReLU())
         self.conv4 = nn.Sequential(
-            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
+            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(1, FILTER_SIZE)),
+            nn.ReLU())
+        self.conv5 = nn.Sequential(
+            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(1, FILTER_SIZE)),
             nn.ReLU())
         self.lstm = nn.LSTM(NUM_FILTERS, NUM_UNITS_LSTM, NUM_LSTM_LAYERS, batch_first=True)
+        if NLSTM:
+            self.fc = nn.Linear(64*105, NUM_CLASSES)
+        else:
+            self.fc = nn.Linear(NUM_UNITS_LSTM, NUM_CLASSES)
 
-        self.fc = nn.Linear(NUM_UNITS_LSTM, NUM_CLASSES)
-        #self.fc = nn.Linear(NUM_FILTERS, NUM_CLASSES)
 
     def forward(self, x):
         # print (x.shape)
@@ -58,17 +63,25 @@ class ConvLSTM(nn.Module):
         # print (out.shape)
         out = self.conv4(out)
         # print (out.shape)
-        # out.view(BATCH_SIZE, -1, NUM_FILTERS)
-        out = out.view(-1, 113*8, 64)
+        # out = out.view(-1, NB_SENSOR_CHANNELS, NUM_FILTERS)
+        if NLSTM:
+            out = out.view(-1, 64*105)
+        else:
+            out = out.view(-1, 105 ,NUM_FILTERS)
+
         h0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
         c0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
         if torch.cuda.is_available():
             h0, c0 = h0.cuda(), c0.cuda()
 
         # forward propagate rnn
-        out, _ = self.lstm(out, (h0, c0))
 
-        out = self.fc(out[:, -1, :])
+
+        if NLSTM:
+            out = self.fc(out)
+        else:
+            out, _ = self.lstm(out, (h0, c0))
+            out = self.fc(out[:, -1, :])
         return out
 
 

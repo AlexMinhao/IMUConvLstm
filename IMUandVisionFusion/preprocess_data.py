@@ -2,13 +2,12 @@
 import os
 import zipfile
 import argparse
-import numpy as np
 import pickle as cp
 
 from io import BytesIO
 from pandas import Series
 from definitions import *
-
+from process_data_new import *
 # Hardcoded names of the files defining the OPPORTUNITY challenge data. As named in the original data.
 OPPORTUNITY_DATA_FILES = ['OpportunityUCIDataset/dataset/S1-Drill.dat',
                           'OpportunityUCIDataset/dataset/S1-ADL1.dat',
@@ -241,26 +240,39 @@ def generate_data(dataset, target_filename, label):
     data_y = np.empty(0)
 
     zf = zipfile.ZipFile(dataset)
+
+    subject = SUBJECT
     print('Processing dataset files ...')
     for filename in OPPORTUNITY_DATA_FILES:
         try:
             data = np.loadtxt(BytesIO(zf.read(filename)))
             print('... file {0}'.format(filename))
             x, y = process_dataset_file(data, label)
+
+            s = Subject(FILES_MAP_SUB[filename], x, y)
+            scenario = s.divide_scenario()
+            s.divide_data_label()
+            subject[FILES_MAP_SUB[filename]] = s
+
             data_x = np.vstack((data_x, x))
             data_y = np.concatenate([data_y, y])
         except KeyError:
             print('ERROR: Did not find {0} in zip file'.format(filename))
 
     # Dataset is segmented into train and test
-    nb_training_samples = 557963
-    # The first 18 OPPORTUNITY data files define the traning dataset, comprising 557963 samples
-    X_train, y_train = data_x[:nb_training_samples, :], data_y[:nb_training_samples]
-    X_test, y_test = data_x[nb_training_samples:, :], data_y[nb_training_samples:]
+    # nb_training_samples = 557963
+    # # The first 18 OPPORTUNITY data files define the traning dataset, comprising 557963 samples
+    # X_train, y_train = data_x[:nb_training_samples, :], data_y[:nb_training_samples]
+    # X_test, y_test = data_x[nb_training_samples:, :], data_y[nb_training_samples:]
 
-    print("Final datasets with size: | train {0} | test {1} | ".format(X_train.shape, X_test.shape))
+    training_set = [subject['S1-Drill'], subject['S1-ADL1'], subject['S1-ADL2'], subject['S1-ADL3'], subject['S1-ADL4'], subject['S1-ADL5'],
+               subject['S2-Drill'], subject['S2-ADL1'], subject['S2-ADL2'], subject['S3-Drill'], subject['S3-ADL1'], subject['S3-ADL2']]
+    testing_set = [subject['S2-ADL3'], subject['S3-ADL3'], subject['S2-ADL4'], subject['S2-ADL5'], subject['S3-ADL4'], subject['S3-ADL5']]
+    # print("Final datasets with size: | train {0} | test {1} | ".format(X_train.shape, X_test.shape))
 
-    obj = [(X_train, y_train), (X_test, y_test)]
+    print("Final datasets with size: | train {0} | test {1} | ".format(np.array(training_set).shape, np.array(testing_set).shape))
+
+    obj = [training_set, testing_set]
     f = open(os.path.join(data_dir, target_filename), 'wb')
     cp.dump(obj, f, protocol=cp.HIGHEST_PROTOCOL)
     f.close()
@@ -288,7 +300,7 @@ def get_args():
 
 if __name__ == '__main__':
 
-    OpportunityUCIDataset_zip, output, l = get_args()
-    generate_data(OpportunityUCIDataset_zip, output, l)
+    # OpportunityUCIDataset_zip, output, l = get_args()
+    generate_data('D:/Research/DeepConvLSTM/OPPORTUNITY/OpportunityUCIDataset.zip', 'D:/Research/DeepConvLSTM/OPPORTUNITY/gestures.data', 'gestures')
 
 

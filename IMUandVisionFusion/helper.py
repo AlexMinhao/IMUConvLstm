@@ -32,6 +32,17 @@ def timeit(name = ''):
     t = time()
 
 
+def get_f1_score(pred_choice, target):
+    # TP    predict and label both eq to 1
+    tp = ((pred_choice == 1) & (target.data == 1)).cpu().sum()
+    # TN    predict and label both eq to 0
+    tn = ((pred_choice == 0) & (target.data == 0)).cpu().sum()
+    # FN    predict 0 label 1
+    fn = ((pred_choice == 0) & (target.data == 1)).cpu().sum()
+    # FP    predict 1 label 0
+    fp = ((pred_choice == 1) & (target.data == 0)).cpu().sum()
+    return tp, tn, fn, fp
+
 
 # def mean_error(output,target):
 #     batch_size = target.size(0)
