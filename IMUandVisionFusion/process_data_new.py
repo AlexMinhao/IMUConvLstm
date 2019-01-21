@@ -1,5 +1,11 @@
 from helper import *
+import os
+import zipfile
+import argparse
+import pickle as cp
 
+from io import BytesIO
+from pandas import Series
 # Hardcoded names of the files defining the OPPORTUNITY challenge data. As named in the original data.
 SCENARIO = ['NULL', 'OpenDoor1', 'OpenDoor2', 'CloseDoor1', 'CloseDoor2', 'OpenFridge', 'CloseFridge', 'OpenDishwasher',
             'CloseDishwasher', 'OpenDrawer1', 'CloseDrawer1', 'OpenDrawer2', 'CloseDrawer2', 'OpenDrawer3',
@@ -63,11 +69,11 @@ CLASS = {   SCENARIO[0]:            0,
 
 class Subject(object):
 
-
     def __init__(self, name, data_x, data_y):
         self.name = name
         self.data_x = data_x
         self.data_y = data_y
+        self.data_length = 0
         self.scenario = {'NULL': [], 'OpenDoor1': [], 'OpenDoor2': [],
                          'CloseDoor1': [], 'CloseDoor2': [], 'OpenFridge': [],
                          'CloseFridge': [], 'OpenDishwasher': [], 'CloseDishwasher': [],
@@ -83,14 +89,22 @@ class Subject(object):
                          'CloseFridge': [], 'OpenDishwasher': [], 'CloseDishwasher': [],
                          'OpenDrawer1': [], 'CloseDrawer1': [], 'OpenDrawer2': [], 'CloseDrawer2': [],
                          'OpenDrawer3': [], 'CloseDrawer3': [], 'CleanTable': [], 'DrinkfromCup': [], 'ToggleSwitch': []}
-    def divide_scenario(self):
 
+    def __len__(self):
+        for scene in SCENARIO:
+            for i in range(len(self.x[scene])):
+                self.data_length = self.data_length+len(self.x[scene][i])
+        return self.data_length
+
+
+    def divide_scenario(self):
+        length = 0
         for scene in SCENARIO:
             index = np.argwhere(self.data_y == CLASS[scene])
+            length = length + len(index)
             self.seperate(index, scene)
+        a = 0
         return self.scenario
-
-
 
     def seperate(self, index, scenario):
         count = 1
@@ -101,11 +115,12 @@ class Subject(object):
                 motionIndex = index[ind:i+1]  # one more word
                 self.scenario[scenario].append(motionIndex)
                 ind = i + 1
-            if i == len(index) - 1:
-                motionIndex = index[ind:i + 1]
+            if i == len(index) - 2:
+                motionIndex = index[ind:]
                 self.scenario[scenario].append(motionIndex)
-        a=0
+
     def divide_data_label(self):
+        data_length = 0
         for scene in SCENARIO:
             motion = []
             label = []
@@ -113,6 +128,7 @@ class Subject(object):
                 index = self.scenario[scene][i]
                 if self.scenario[scene][i].size:
                     index = list(np.concatenate(self.scenario[scene][i]))
+                #print('IndexLength:{0}'.format(len(index)))
                 m_seg = self.data_x[index, :]
                 l_seg = self.data_y[index]
 
@@ -121,10 +137,11 @@ class Subject(object):
             self.x[scene] = motion
             self.y[scene] = label
 
+        for scene in SCENARIO:
+            for i in range(len(self.x[scene])):
+                data_length = data_length + len(self.x[scene][i])
 
-
-
-
+        a = 0
 
 
 

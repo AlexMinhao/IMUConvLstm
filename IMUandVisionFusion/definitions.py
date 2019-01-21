@@ -1,9 +1,9 @@
 #
 DATAFORMAT = 1
-NULLCLASS = 1
-NLSTM = 0
+CONTAIN_NULLCLASS = 1
+NO_NLSTM = 0
 
-SEVER = 1
+SEVER = 0
 
 # Hardcoded number of sensor channels employed in the OPPORTUNITY challenge
 NB_SENSOR_CHANNELS = 113
@@ -12,7 +12,7 @@ SLIDING_WINDOW_LENGTH = 24
 # Hardcoded step of the sliding window mechanism employed to segment the data
 SLIDING_WINDOW_STEP = 12
 
-EPOCH = 1000
+EPOCH = 2
 # Batch Size
 BATCH_SIZE = 100
 # Hardcoded number of classes in the gesture recognition problem

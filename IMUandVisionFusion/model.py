@@ -47,11 +47,10 @@ class ConvLSTM(nn.Module):
             nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(1, FILTER_SIZE)),
             nn.ReLU())
         self.lstm = nn.LSTM(NUM_FILTERS, NUM_UNITS_LSTM, NUM_LSTM_LAYERS, batch_first=True)
-        if NLSTM:
-            self.fc = nn.Linear(64*105, NUM_CLASSES)
+        if NO_NLSTM:
+            self.fc = nn.Linear(64 * 105, NUM_CLASSES)
         else:
             self.fc = nn.Linear(NUM_UNITS_LSTM, NUM_CLASSES)
-
 
     def forward(self, x):
         # print (x.shape)
@@ -64,10 +63,11 @@ class ConvLSTM(nn.Module):
         out = self.conv4(out)
         # print (out.shape)
         # out = out.view(-1, NB_SENSOR_CHANNELS, NUM_FILTERS)
-        if NLSTM:
-            out = out.view(-1, 64*105)
+        if NO_NLSTM:
+            out = out.view(-1, 64 * 105)
         else:
-            out = out.view(-1, 105 ,NUM_FILTERS)
+            out = out.view(-1, 105, NUM_FILTERS)
+
 
         h0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
         c0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
@@ -77,7 +77,7 @@ class ConvLSTM(nn.Module):
         # forward propagate rnn
 
 
-        if NLSTM:
+        if NO_NLSTM:
             out = self.fc(out)
         else:
             out, _ = self.lstm(out, (h0, c0))

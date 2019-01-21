@@ -253,7 +253,8 @@ def generate_data(dataset, target_filename, label):
             scenario = s.divide_scenario()
             s.divide_data_label()
             subject[FILES_MAP_SUB[filename]] = s
-
+            length = subject[FILES_MAP_SUB[filename]].__len__()
+            print("Subject: {0} Length: {1} x_len: {2}".format(filename, length, len(x)))
             data_x = np.vstack((data_x, x))
             data_y = np.concatenate([data_y, y])
         except KeyError:
@@ -264,7 +265,8 @@ def generate_data(dataset, target_filename, label):
     # # The first 18 OPPORTUNITY data files define the traning dataset, comprising 557963 samples
     # X_train, y_train = data_x[:nb_training_samples, :], data_y[:nb_training_samples]
     # X_test, y_test = data_x[nb_training_samples:, :], data_y[nb_training_samples:]
-
+    print("Number of X_train: {0} X_test: {1}" .format(len(data_x[:557963, :]), len(data_x[557963:, :])))
+                            #51455               #
     training_set = [subject['S1-Drill'], subject['S1-ADL1'], subject['S1-ADL2'], subject['S1-ADL3'], subject['S1-ADL4'], subject['S1-ADL5'],
                subject['S2-Drill'], subject['S2-ADL1'], subject['S2-ADL2'], subject['S3-Drill'], subject['S3-ADL1'], subject['S3-ADL2']]
     testing_set = [subject['S2-ADL3'], subject['S3-ADL3'], subject['S2-ADL4'], subject['S2-ADL5'], subject['S3-ADL4'], subject['S3-ADL5']]
@@ -301,6 +303,6 @@ def get_args():
 if __name__ == '__main__':
 
     # OpportunityUCIDataset_zip, output, l = get_args()
-    generate_data('D:/Research/DeepConvLSTM/OPPORTUNITY/OpportunityUCIDataset.zip', 'D:/Research/DeepConvLSTM/OPPORTUNITY/gestures.data', 'gestures')
+    generate_data('C:/ALEX/Doc/paper/PytorchTuto/OPPORTUNITY/OpportunityUCIDataset.zip', 'C:/ALEX/Doc/paper/PytorchTuto/OPPORTUNITY/OppSegBySubjectGestures.data', 'gestures')
 
 
