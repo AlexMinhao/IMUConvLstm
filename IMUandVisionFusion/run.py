@@ -66,20 +66,18 @@ def get_variable(x):
 
 
 if __name__ == '__main__':
+    path = 0
     if SEVER == 1:
-        dr = '/home/fyhuang/ConvLSTM/OPPORTUNITY/OpportunityUCIDataset.zip'
-        dp = '/home/fyhuang/ConvLSTM/OPPORTUNITY/oppChallenge_gestures.data'
+        path = os.path.join(os.path.dirname(os.getcwd()), r'OPPORTUNITY\OppSegBySubjectGestures.data')
     else:
-        dr = 'D:/Research/DeepConvLSTM/OPPORTUNITY/OpportunityUCIDataset.zip'
-        dp = 'C:/ALEX/Doc/paper/PytorchTuto/OPPORTUNITY/OppSegBySubjectGestures.data'
-
+        path = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), r'OPPORTUNITY\OppSegBySubjectGestures.data')
 
     # preprocess_data(dr,dp)
 
     print("Loading data...")
 
     if DATAFORMAT:
-        path = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), r'OPPORTUNITY\OppSegBySubjectGestures.data')
+
         Opp = OPPORTUNITY(path)
         X_train, y_train, X_test, y_test = Opp.load() #load_dataset(dp)
         assert NB_SENSOR_CHANNELS == X_train.shape[2]
@@ -105,7 +103,7 @@ if __name__ == '__main__':
         model.cuda()
         print("Model on gpu")
 
-    # 必须明确一点：在pytorch中若模型使用CrossEntropyLoss这个loss函数，则不应该在最后一层再使用softmax进行激活。
+    # If use CrossEntropyLoss，softmax wont be used in the final layer
     loss_function = nn.CrossEntropyLoss()
     optimizer = optim.RMSprop(model.parameters(), lr=10e-5)
 
@@ -209,8 +207,8 @@ if __name__ == '__main__':
 
     print('Accuracy of the model  {0} %, F1-score: {1}'.format(100 * correct / total, f1_train.avg))
     # Test the model
-    # 测试模型
-    model.eval()  # 改成测试形态, 应用场景如: dropout
+
+    model.eval()
     correct = 0
     total = 0
     for i, (seqs, labels) in enumerate(test_loader):
