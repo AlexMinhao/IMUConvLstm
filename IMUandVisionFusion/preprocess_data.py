@@ -59,6 +59,20 @@ NORM_MIN_THRESHOLDS = [-3000,  -3000,  -3000,  -3000,  -3000,  -3000,  -3000,  -
                        -200,   -5000,  -5000,  -5000,  -5000,  -5000,  -5000,  -10000, -10000,
                        -10000, -10000, -10000, -10000, -250, ]
 
+NORM_MAX_FourSENSOR = [3000,   3000,   3000,   10000,  10000,  10000,  1500,   1500,   1500,
+                       3000,   3000,   3000,   10000,  10000,  10000,  1500,   1500,   1500,
+                       250,    25,     200,    5000,   5000,   5000,   5000,   5000,   5000,
+                       10000,  10000,  10000,  10000,  10000,  10000,  250,    250,    25,
+                       200,    5000,   5000,   5000,   5000,   5000,   5000,   10000,  10000,
+                       10000,  10000,  10000,  10000,  250, ]
+
+NORM_MIN_FourSENSOR = [-3000,  -3000,  -3000,  -10000, -10000, -10000, -1000,  -1000,  -1000,
+                       -3000,  -3000,  -3000,  -10000, -10000, -10000, -1000,  -1000,  -1000,
+                       -250,   -100,   -200,   -5000,  -5000,  -5000,  -5000,  -5000,  -5000,
+                       -10000, -10000, -10000, -10000, -10000, -10000, -250,   -250,   -100,
+                       -200,   -5000,  -5000,  -5000,  -5000,  -5000,  -5000,  -10000, -10000,
+                       -10000, -10000, -10000, -10000, -250, ]
+
 
 def select_columns_opp(data):
     """Selection of the 113 columns employed in the OPPORTUNITY challenge
@@ -70,13 +84,22 @@ def select_columns_opp(data):
     """
 
     #                     included-excluded
-    features_delete = np.arange(46, 50)                                            # [46,47,48,49]
-    features_delete = np.concatenate([features_delete, np.arange(59, 63)])         # [46, 47, 48, 49, 59, 60, 61, 62]
-    features_delete = np.concatenate([features_delete, np.arange(72, 76)])         # [46, 47, 48, 49, 59, 60, 61, 62, 72, 73, 74, 75]
-    features_delete = np.concatenate([features_delete, np.arange(85, 89)])         # [46, 47, 48, 49, 59, 60, 61, 62, 72, 73, 74, 75, 85, 86, 87, 88]
-    features_delete = np.concatenate([features_delete, np.arange(98, 102)])        # [ 46,  47,  48,  49,  59,  60,  61,  62,  72,  73,  74,  75,  85, 86,  87,  88,  98,  99, 100, 101]
-    features_delete = np.concatenate([features_delete, np.arange(134, 243)])       # [ 46,  47,  48,  49,  59,  60,  61,  62,  72,  73,  74,  75,  85, 86,  87,  88,  98,  99, 100, 101, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242]
-    features_delete = np.concatenate([features_delete, np.arange(244, 249)])       #
+    # features_delete = np.arange(46, 50)                                            # [46,47,48,49]
+    # features_delete = np.concatenate([features_delete, np.arange(59, 63)])         # [46, 47, 48, 49, 59, 60, 61, 62]
+    # features_delete = np.concatenate([features_delete, np.arange(72, 76)])         # [46, 47, 48, 49, 59, 60, 61, 62, 72, 73, 74, 75]
+    # features_delete = np.concatenate([features_delete, np.arange(85, 89)])         # [46, 47, 48, 49, 59, 60, 61, 62, 72, 73, 74, 75, 85, 86, 87, 88]
+    # features_delete = np.concatenate([features_delete, np.arange(98, 102)])        # [ 46,  47,  48,  49,  59,  60,  61,  62,  72,  73,  74,  75,  85, 86,  87,  88,  98,  99, 100, 101]
+    # features_delete = np.concatenate([features_delete, np.arange(134, 243)])       # [ 46,  47,  48,  49,  59,  60,  61,  62,  72,  73,  74,  75,  85, 86,  87,  88,  98,  99, 100, 101, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242]
+    # features_delete = np.concatenate([features_delete, np.arange(244, 249)])       #
+
+    # reduce the num of sensors
+    features_delete = np.arange(1, 63)  # [46,47,48,49]
+    features_delete = np.concatenate([features_delete, np.arange(72, 89)])  # [46, 47, 48, 49, 59, 60, 61, 62, 72, 73, 74, 75]
+    features_delete = np.concatenate([features_delete, np.arange(98, 102)])  # [ 46,  47,  48,  49,  59,  60,  61,  62,  72,  73,  74,  75,  85, 86,  87,  88,  98,  99, 100, 101]
+    features_delete = np.concatenate([features_delete, np.arange(134, 243)])  # [ 46,  47,  48,  49,  59,  60,  61,  62,  72,  73,  74,  75,  85, 86,  87,  88,  98,  99, 100, 101, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242]
+    features_delete = np.concatenate([features_delete, np.arange(244, 249)])  #
+    temp = np.delete(data, features_delete, 1)
+
     return np.delete(data, features_delete, 1)
 
 
@@ -113,13 +136,22 @@ def divide_x_y(data, label):
         Features encapsulated into a matrix and labels as an array
     """
 
-    data_x = data[:, 1:114]
+    # data_x = data[:, 1:114]
+    # if label not in ['locomotion', 'gestures']:
+    #         raise RuntimeError("Invalid label: '%s'" % label)
+    # if label == 'locomotion':
+    #     data_y = data[:, 114]  # Locomotion label
+    # elif label == 'gestures':
+    #     data_y = data[:, 115]  # Gestures label
+
+    # Reduce the num of sensors
+    data_x = data[:, 1:51]
     if label not in ['locomotion', 'gestures']:
             raise RuntimeError("Invalid label: '%s'" % label)
     if label == 'locomotion':
-        data_y = data[:, 114]  # Locomotion label
+        data_y = data[:, 51]  # Locomotion label
     elif label == 'gestures':
-        data_y = data[:, 115]  # Gestures label
+        data_y = data[:, 52]  # Gestures label
 
     return data_x, data_y
 
@@ -217,7 +249,7 @@ def process_dataset_file(data, label):
     data_x[np.isnan(data_x)] = 0
 
     # All sensor channels are normalized
-    data_x = normalize(data_x, NORM_MAX_THRESHOLDS, NORM_MIN_THRESHOLDS)
+    data_x = normalize(data_x, NORM_MAX_FourSENSOR, NORM_MIN_FourSENSOR)
 
     return data_x, data_y
 
@@ -303,6 +335,6 @@ def get_args():
 if __name__ == '__main__':
 
     # OpportunityUCIDataset_zip, output, l = get_args()
-    generate_data('C:/ALEX/Doc/paper/PytorchTuto/OPPORTUNITY/OpportunityUCIDataset.zip', 'C:/ALEX/Doc/paper/PytorchTuto/OPPORTUNITY/OppSegBySubjectGestures.data', 'gestures')
+    generate_data('C:/ALEX/Doc/paper/PytorchTuto/OPPORTUNITY/OpportunityUCIDataset.zip', 'C:/ALEX/Doc/paper/PytorchTuto/OPPORTUNITY/OppSegBySubjectGesturesReduceSensors.data', 'gestures')
 
 

@@ -32,13 +32,13 @@ class ConvLSTM(nn.Module):
         super(ConvLSTM, self).__init__()
 
         self.conv1 = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=NUM_FILTERS, kernel_size=(12, FILTER_SIZE)),
+            nn.Conv2d(in_channels=1, out_channels=NUM_FILTERS, kernel_size=(12, FILTER_SIZE), stride=3),
             nn.ReLU())
         self.conv2 = nn.Sequential(
-            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(12, FILTER_SIZE)),
+            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, FILTER_SIZE)),
             nn.ReLU())
         self.conv3 = nn.Sequential(
-            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(2, FILTER_SIZE)),
+            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, FILTER_SIZE)),
             nn.ReLU())
         self.conv4 = nn.Sequential(
             nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(1, FILTER_SIZE)),
@@ -64,9 +64,9 @@ class ConvLSTM(nn.Module):
         # print (out.shape)
         # out = out.view(-1, NB_SENSOR_CHANNELS, NUM_FILTERS)
         if NO_NLSTM:
-            out = out.view(-1, 64 * 105)
+            out = out.view(-1, 64 * CHANNELS_NUM_50)
         else:
-            out = out.view(-1, 105, NUM_FILTERS)
+            out = out.view(-1, 10, NUM_FILTERS) #CHANNELS_NUM_50
 
 
         h0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))

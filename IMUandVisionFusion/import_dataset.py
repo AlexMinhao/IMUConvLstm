@@ -55,7 +55,7 @@ class OPPORTUNITY(Dataset):
             return len(self.X_test)
 
     def concatenate_same_class(self, data_x, data_y):
-        X = np.zeros((1, 24, 113))
+        X = np.zeros((1, 24, NB_SENSOR_CHANNELS))
         Y = np.zeros((1,1))
         for i in range(len(data_x)):
             if len(data_x[i]) > 0:

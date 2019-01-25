@@ -70,7 +70,7 @@ if __name__ == '__main__':
     if SEVER == 1:
         path = os.path.join(os.path.dirname(os.getcwd()), r'OPPORTUNITY\OppSegBySubjectGestures.data')
     else:
-        path = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), r'OPPORTUNITY\OppSegBySubjectGestures.data')
+        path = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), r'OPPORTUNITY\OppSegBySubjectGesturesReduceSensors.data')
 
     # preprocess_data(dr,dp)
 
@@ -114,6 +114,10 @@ if __name__ == '__main__':
             training_set = []
             for i in range(len(y_train)):
                 x = X_train[i]
+                x_33_compass = x[-1, :, 33].reshape(24, 1)
+                x = np.delete(x[-1, :, :], 33, 1)   # delete 33 col and append the last
+                x = np.concatenate([x, x_33_compass], axis=1)
+                x = x.reshape(1,24,50)
                 y = y_train[i]
                 xy = (x, y)
                 training_set.append(xy)
@@ -148,11 +152,8 @@ if __name__ == '__main__':
                 xy = (x, y)
                 testing_set.append(xy)
 
-
     train_loader = DataLoader(dataset=training_set, batch_size=BATCH_SIZE, shuffle=True)
     test_loader = DataLoader(dataset=testing_set, batch_size=BATCH_SIZE, shuffle=True)
-
-
 
     batch_time = AverageMeter()
     data_time = AverageMeter()
