@@ -68,7 +68,7 @@ def get_variable(x):
 if __name__ == '__main__':
     path = 0
     if torch.cuda.is_available():
-        path = os.path.join(os.path.dirname(os.getcwd()), r'OPPORTUNITY\OppSegBySubjectGestures.data')
+        path = os.path.join(os.path.dirname(os.getcwd()), r'OPPORTUNITY/OppSegBySubjectGesturesReduceSensors.data')
     else:
         path = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), r'OPPORTUNITY\OppSegBySubjectGesturesReduceSensors.data')
 
