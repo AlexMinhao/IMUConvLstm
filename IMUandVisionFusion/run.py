@@ -195,6 +195,13 @@ if __name__ == '__main__':
             total += labels.size(0)
             labels_reshape = labels
             correct += (preds == labels_reshape.data).sum().item()
+
+            ifCorrect = np.array((preds == labels_reshape.data))
+            failure_case_ind = np.where(ifCorrect == 0)
+            label_for_failure_case = np.array(labels_reshape)
+            failure_case_label = label_for_failure_case[failure_case_ind]
+            print('Failure_case  {0} % '.format(failure_case_label))
+
             f1_train.update(f1_score(labels_reshape, preds, average='micro'))
             # measure elapsed time
             batch_time.update(time() - end)
@@ -225,6 +232,13 @@ if __name__ == '__main__':
         total += labels.size(0)
         labels_reshape = labels
         correct += (predicted == labels_reshape.data).sum()
+
+        ifCorrect = np.array((predicted == labels_reshape.data))
+        failure_case_ind = np.where(ifCorrect == 0)
+        label_for_failure_case = np.array(labels_reshape)
+        failure_case_label = label_for_failure_case[failure_case_ind]
+        print('Failure_case  {0} % '.format(failure_case_label))
+
         f1_test.update(f1_score(labels_reshape, predicted, average='micro'))
     print('Test Accuracy of the model  {0}%, F1-score {1}%'.format(100 * correct / total, f1_test.avg))
     # with torch.no_grad():
