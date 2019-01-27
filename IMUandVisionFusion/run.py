@@ -67,7 +67,7 @@ def get_variable(x):
 
 if __name__ == '__main__':
     path = 0
-    if SEVER == 1:
+    if torch.cuda.is_available():
         path = os.path.join(os.path.dirname(os.getcwd()), r'OPPORTUNITY\OppSegBySubjectGestures.data')
     else:
         path = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), r'OPPORTUNITY\OppSegBySubjectGesturesReduceSensors.data')
@@ -199,8 +199,11 @@ if __name__ == '__main__':
             ifCorrect = np.array((preds == labels_reshape.data))
             failure_case_ind = np.where(ifCorrect == 0)
             label_for_failure_case = np.array(labels_reshape)
-            failure_case_label = label_for_failure_case[failure_case_ind]
-            print('Failure_case  {0} % '.format(failure_case_label))
+            label_for_pred_case = np.array(preds)
+            failure_case_True_label = label_for_failure_case[failure_case_ind]
+            failure_case_Pred_label = label_for_pred_case[failure_case_ind]
+            print('Failure_case_True  {0} % '.format(failure_case_True_label))
+            print('Failure_case_Pred  {0} % '.format(failure_case_Pred_label))
 
             f1_train.update(f1_score(labels_reshape, preds, average='micro'))
             # measure elapsed time
@@ -233,11 +236,14 @@ if __name__ == '__main__':
         labels_reshape = labels
         correct += (predicted == labels_reshape.data).sum()
 
-        ifCorrect = np.array((predicted == labels_reshape.data))
+        ifCorrect = np.array((preds == labels_reshape.data))
         failure_case_ind = np.where(ifCorrect == 0)
         label_for_failure_case = np.array(labels_reshape)
-        failure_case_label = label_for_failure_case[failure_case_ind]
-        print('Failure_case  {0} % '.format(failure_case_label))
+        label_for_pred_case = np.array(preds)
+        failure_case_True_label = label_for_failure_case[failure_case_ind]
+        failure_case_Pred_label = label_for_pred_case[failure_case_ind]
+        print('Failure_case_True  {0} % '.format(failure_case_True_label))
+        print('Failure_case_Pred  {0} % '.format(failure_case_Pred_label))
 
         f1_test.update(f1_score(labels_reshape, predicted, average='micro'))
     print('Test Accuracy of the model  {0}%, F1-score {1}%'.format(100 * correct / total, f1_test.avg))
