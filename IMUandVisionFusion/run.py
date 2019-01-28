@@ -114,11 +114,30 @@ if __name__ == '__main__':
             training_set = []
             for i in range(len(y_train)):
                 x = X_train[i]
+                y = y_train[i]
+                x_object_channel = 0
+                if y == 1 or 2 or 3 or 4:
+                    x_object_channel = np.repeat(10,24).reshape(24, 1)
+                elif y == 5 or 6:
+                    x_object_channel = np.repeat(20,24).reshape(24, 1)
+                elif y == 7 or 8:
+                    x_object_channel = np.repeat(30,24).reshape(24, 1)
+                elif y == 9 or 10 or 11 or 12 or 13 or 14:
+                    x_object_channel = np.repeat(40,24).reshape(24, 1)
+                elif y == 15:
+                    x_object_channel = np.repeat(50,24).reshape(24, 1)
+                elif y == 16:
+                    x_object_channel = np.repeat(60,24).reshape(24, 1)
+                elif y == 17:
+                    x_object_channel = np.repeat(70,24).reshape(24, 1)
+                else:
+                    x_object_channel = np.repeat(0,24).reshape(24, 1)
+
                 x_33_compass = x[-1, :, 33].reshape(24, 1)
                 x = np.delete(x[-1, :, :], 33, 1)   # delete 33 col and append the last
                 x = np.concatenate([x, x_33_compass], axis=1)
                 x = x.reshape(1,24,50)
-                y = y_train[i]
+
                 xy = (x, y)
                 training_set.append(xy)
 
@@ -128,7 +147,32 @@ if __name__ == '__main__':
             for j in range(len(y_test)):
                 x = X_test[j]
                 y = y_test[j]
+
+                x_object_channel = 0
+                if y == 1 or 2 or 3 or 4:
+                    x_object_channel = np.repeat(10, 24).reshape(24, 1)
+                elif y == 5 or 6:
+                    x_object_channel = np.repeat(20, 24).reshape(24, 1)
+                elif y == 7 or 8:
+                    x_object_channel = np.repeat(30, 24).reshape(24, 1)
+                elif y == 9 or 10 or 11 or 12 or 13 or 14:
+                    x_object_channel = np.repeat(40, 24).reshape(24, 1)
+                elif y == 15:
+                    x_object_channel = np.repeat(50, 24).reshape(24, 1)
+                elif y == 16:
+                    x_object_channel = np.repeat(60, 24).reshape(24, 1)
+                elif y == 17:
+                    x_object_channel = np.repeat(70, 24).reshape(24, 1)
+                else:
+                    x_object_channel = np.repeat(0, 24).reshape(24, 1)
+
+                x_33_compass = x[-1, :, 33].reshape(24, 1)
+                x = np.delete(x[-1, :, :], 33, 1)  # delete 33 col and append the last
+                x = np.concatenate([x, x_33_compass], axis=1)
+                x = x.reshape(1, 24, 50)
+
                 xy = (x, y)
+
                 testing_set.append(xy)
 
         else:
