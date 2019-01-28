@@ -280,10 +280,10 @@ if __name__ == '__main__':
         labels_reshape = labels
         correct += (predicted == labels_reshape.data).sum()
 
-        ifCorrect = np.array((preds == labels_reshape.data))
+        ifCorrect = np.array((predicted == labels_reshape.data))
         failure_case_ind = np.where(ifCorrect == 0)
         label_for_failure_case = np.array(labels_reshape)
-        label_for_pred_case = np.array(preds)
+        label_for_pred_case = np.array(predicted)
         failure_case_True_label = label_for_failure_case[failure_case_ind]
         failure_case_Pred_label = label_for_pred_case[failure_case_ind]
         print('Failure_case_True  {0} % '.format(failure_case_True_label))
