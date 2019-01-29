@@ -6,8 +6,11 @@ NO_NLSTM = 0
 SEVER = 0
 
 #
+CHANNELS_OBJECT = 51
+
+
 CHANNELS_NUM_113 = 105
-CHANNELS_NUM_50  = 42
+CHANNELS_NUM_50_TO_42  = 42
 # Hardcoded number of sensor channels employed in the OPPORTUNITY challenge
 NB_SENSOR_CHANNELS = 50#113
 # Hardcoded length of the sliding window mechanism employed to segment the data

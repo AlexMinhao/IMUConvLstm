@@ -135,8 +135,8 @@ if __name__ == '__main__':
 
                 x_33_compass = x[-1, :, 33].reshape(24, 1)
                 x = np.delete(x[-1, :, :], 33, 1)   # delete 33 col and append the last
-                x = np.concatenate([x, x_33_compass], axis=1)
-                x = x.reshape(1,24,50)
+                x = np.concatenate([x, x_33_compass,x_object_channel], axis=1)
+                x = x.reshape(1,24,CHANNELS_OBJECT)
 
                 xy = (x, y)
                 training_set.append(xy)
@@ -168,8 +168,8 @@ if __name__ == '__main__':
 
                 x_33_compass = x[-1, :, 33].reshape(24, 1)
                 x = np.delete(x[-1, :, :], 33, 1)  # delete 33 col and append the last
-                x = np.concatenate([x, x_33_compass], axis=1)
-                x = x.reshape(1, 24, 50)
+                x = np.concatenate([x, x_33_compass, x_object_channel], axis=1)
+                x = x.reshape(1, 24, CHANNELS_OBJECT)
 
                 xy = (x, y)
 
