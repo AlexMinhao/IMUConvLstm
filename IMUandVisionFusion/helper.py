@@ -43,6 +43,10 @@ def get_f1_score(pred_choice, target):
     fp = ((pred_choice == 1) & (target.data == 0)).cpu().sum()
     return tp, tn, fn, fp
 
+# def data_augmentation(x,y):
+#
+
+
 
 # def mean_error(output,target):
 #     batch_size = target.size(0)

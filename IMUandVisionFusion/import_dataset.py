@@ -35,6 +35,8 @@ class OPPORTUNITY(Dataset):
         self.root = root
         self.X_train = []
         self.y_train = []
+        self.X_validation = []
+        self.y_validation = []
         self.X_test = []
         self.y_test = []
         self.train = train
@@ -55,14 +57,14 @@ class OPPORTUNITY(Dataset):
             return len(self.X_test)
 
     def concatenate_same_class(self, data_x, data_y):
-        X = np.zeros((1, 24, NB_SENSOR_CHANNELS))
+        X = np.zeros((1, 24, NB_SENSOR_CHANNELS_113))
         Y = np.zeros((1,1))
         for i in range(len(data_x)):
             if len(data_x[i]) > 0:
                 # Padding
                 padding_size = SLIDING_WINDOW_STEP - len(data_x[i]) % SLIDING_WINDOW_STEP \
                     if len(data_x[i]) > SLIDING_WINDOW_LENGTH else SLIDING_WINDOW_LENGTH+SLIDING_WINDOW_STEP-len(data_x[i])
-                padding_x = np.zeros((padding_size, NB_SENSOR_CHANNELS))
+                padding_x = np.zeros((padding_size, NB_SENSOR_CHANNELS_113))
                 data_x[i] = np.row_stack((data_x[i], padding_x))
                 data_y[i] = data_y[i].repeat(len(data_x[i]))
                 x_temp = sliding_window(data_x[i], (SLIDING_WINDOW_LENGTH, data_x[i].shape[1]), (SLIDING_WINDOW_STEP, 1))
@@ -81,11 +83,15 @@ class OPPORTUNITY(Dataset):
         f.close()
 
         training_set = data[0]
-        testing_set = data[1]
+        validation_set = data[1]
+        testing_set = data[2]
 
         print(" ..from file {}".format(filename))
-        print("Final datasets with size: | train {0} | test {1} | ".format(np.array(training_set).shape,
-                                                                           np.array(testing_set).shape))
+        print("Final datasets with size: | train {0} | validation {1} |test {2} | ".format(np.array(training_set).shape,
+                                                                                           np.array(
+                                                                                               validation_set).shape,
+                                                                                           np.array(testing_set).shape))
+
         # ..reading instances: train (557963, 113), test (118750, 113)
         # (46495,24,113)  (46495,)  column
         x_train = []
@@ -103,6 +109,22 @@ class OPPORTUNITY(Dataset):
                 y_train.append(y_scen[1:])
         self.X_train = np.row_stack(x_train)
         self.y_train = np.row_stack(y_train)
+
+        x_validation = []
+        y_validation = []
+        for i in range(len(validation_set)):
+            for scen in SCENARIO:
+                x = validation_set[i].x[scen]
+                #self.X_train.append(x)
+                y = validation_set[i].y[scen]
+                y = [item[0] for item in y]
+                #self.y_train.append(y)
+
+                x_scen, y_scen = self.concatenate_same_class(x, y)
+                x_validation.append(x_scen[1:])
+                y_validation.append(y_scen[1:])
+        self.X_validation = np.row_stack(x_validation)
+        self.y_validation = np.row_stack(y_validation)
 
         x_test = []
         y_test = []
@@ -123,7 +145,7 @@ class OPPORTUNITY(Dataset):
                                                                            np.array(self.X_test).shape))
 
     def load(self):
-        return self.X_train, self.y_train, self.X_test, self.y_test
+        return self.X_train, self.y_train, self.X_validation, self.y_validation, self.X_test, self.y_test
         # X = []
         # for i in range(len(self.X_train)):
         #     if self.X_train[i] != []:

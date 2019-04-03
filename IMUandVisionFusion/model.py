@@ -32,19 +32,27 @@ class ConvLSTM(nn.Module):
         super(ConvLSTM, self).__init__()
 
         self.conv1 = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=NUM_FILTERS, kernel_size=(12, FILTER_SIZE), stride=3),
+            nn.Conv2d(in_channels=1, out_channels=NUM_FILTERS, kernel_size=(12, FILTER_SIZE), stride=(1, 3)),
             nn.ReLU())
         self.conv2 = nn.Sequential(
             nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, FILTER_SIZE)),
+            nn.BatchNorm2d(NUM_FILTERS),
+            nn.Dropout2d(0.5),
             nn.ReLU())
         self.conv3 = nn.Sequential(
             nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, FILTER_SIZE)),
+            nn.BatchNorm2d(NUM_FILTERS),
+            nn.Dropout2d(0.5),
             nn.ReLU())
         self.conv4 = nn.Sequential(
             nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(1, FILTER_SIZE)),
+            # nn.BatchNorm2d(NUM_FILTERS),
+            # nn.Dropout2d(0.5),
             nn.ReLU())
         self.conv5 = nn.Sequential(
             nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(1, FILTER_SIZE)),
+            # nn.BatchNorm2d(NUM_FILTERS),
+            # nn.Dropout2d(0.5),
             nn.ReLU())
         self.lstm = nn.LSTM(NUM_FILTERS, NUM_UNITS_LSTM, NUM_LSTM_LAYERS, batch_first=True)
         if NO_NLSTM:
@@ -66,7 +74,7 @@ class ConvLSTM(nn.Module):
         if NO_NLSTM:
             out = out.view(-1, 64 * CHANNELS_NUM_50_TO_42)
         else:
-            out = out.view(-1, 11, NUM_FILTERS) #CHANNELS_NUM_50
+            out = out.view(-1, 9*31, NUM_FILTERS) #CHANNELS_NUM_50
 
 
         h0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
