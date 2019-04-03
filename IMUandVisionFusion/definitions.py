@@ -21,7 +21,7 @@ SLIDING_WINDOW_LENGTH = 24
 # Hardcoded step of the sliding window mechanism employed to segment the data
 SLIDING_WINDOW_STEP = 12
 
-BASE_lr = 10e-7
+BASE_lr = 0.0003
 STEP = 5
 EPOCH = 10
 # Batch Size

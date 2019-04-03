@@ -2,13 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8e37c61-1e93-4cef-8521-796ae9d25435" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/gan_augmentation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/model_epoch_0.pth" beforeDir="false" afterPath="$PROJECT_DIR$/results/model_epoch_0.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/definitions.py" beforeDir="false" afterPath="$PROJECT_DIR$/definitions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/results/train.log" beforeDir="false" afterPath="$PROJECT_DIR$/results/train.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/results/train_batch.log" beforeDir="false" afterPath="$PROJECT_DIR$/results/train_batch.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/train_label_pred.log" beforeDir="false" afterPath="$PROJECT_DIR$/results/train_label_pred.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/results/val.log" beforeDir="false" afterPath="$PROJECT_DIR$/results/val.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/validation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/val_label_pred.log" beforeDir="false" afterPath="$PROJECT_DIR$/results/val_label_pred.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,33 +28,33 @@
           <entry key="project.open.time.20" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.open.time.8" value="4" />
+          <entry key="project.open.time.8" value="5" />
           <entry key="project.open.time.9" value="2" />
-          <entry key="project.opened" value="15" />
+          <entry key="project.opened" value="16" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="log" value="14" />
-          <entry key="py" value="51" />
+          <entry key="py" value="55" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Log" value="3" />
           <entry key="PLAIN_TEXT" value="11" />
-          <entry key="Python" value="51" />
+          <entry key="Python" value="55" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="555" />
-          <entry key="py" value="5097" />
+          <entry key="py" value="5492" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="5652" />
+          <entry key="Python" value="6047" />
         </counts>
       </usages-collector>
     </session>
@@ -62,8 +64,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/run.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="82">
-              <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
+            <state relative-caret-position="5852">
+              <caret line="328" column="14" selection-start-line="328" selection-start-column="14" selection-end-line="328" selection-end-column="14" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -71,7 +76,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/validation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
+            <state relative-caret-position="570">
               <caret line="37" column="60" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="60" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
@@ -83,8 +88,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/import_dataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="146" column="8" selection-start-line="146" selection-start-column="8" selection-end-line="146" selection-end-column="8" />
+            <state relative-caret-position="513">
+              <caret line="33" column="8" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="8" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <marker date="1554206185476" expanded="true" signature="785:1081" ph="..." />
@@ -96,8 +101,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="97">
-              <caret line="50" column="8" selection-start-line="50" selection-start-column="8" selection-end-line="50" selection-end-column="8" />
+            <state relative-caret-position="152">
+              <caret line="29" column="23" selection-start-line="29" selection-start-column="23" selection-end-line="29" selection-end-column="23" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -105,11 +110,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="46">
-              <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
+            <state relative-caret-position="285">
+              <caret line="24" column="42" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="42" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/gan_augmentation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="36">
+              <caret line="191" column="16" selection-start-line="191" selection-start-column="16" selection-end-line="191" selection-end-column="16" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -120,8 +137,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="62" column="25" selection-start-line="62" selection-start-column="25" selection-end-line="62" selection-end-column="25" />
+            <state relative-caret-position="589">
+              <caret line="34" column="57" selection-start-line="34" selection-start-column="57" selection-end-line="34" selection-end-column="57" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -132,8 +149,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/definitions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="33" selection-start-line="33" selection-end-line="33" />
+            <state relative-caret-position="152">
+              <caret line="25" column="10" selection-start-line="25" selection-start-column="10" selection-end-line="25" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -153,7 +170,6 @@
       <find>adjust_idx_labels</find>
       <find>OPPORTUNITY_DATA_FILES</find>
       <find>process_dataset_file</find>
-      <find>opp_sliding_window</find>
       <find>flatten</find>
       <find>load_dataset</find>
       <find>filter</find>
@@ -168,6 +184,8 @@
       <find>loss_function</find>
       <find>NB_SENSOR_CHANNELS</find>
       <find>Logger</find>
+      <find>opp_sliding_window</find>
+      <find>sliding_window</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -185,19 +203,20 @@
         <option value="$PROJECT_DIR$/preprocess_data.py" />
         <option value="$PROJECT_DIR$/import_dataset.py" />
         <option value="$PROJECT_DIR$/model.py" />
-        <option value="$PROJECT_DIR$/definitions.py" />
-        <option value="$PROJECT_DIR$/utils.py" />
         <option value="$PROJECT_DIR$/run.py" />
         <option value="$PROJECT_DIR$/validation.py" />
         <option value="$PROJECT_DIR$/train.py" />
+        <option value="$PROJECT_DIR$/definitions.py" />
+        <option value="$PROJECT_DIR$/utils.py" />
+        <option value="$PROJECT_DIR$/gan_augmentation.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="2224" />
-    <option name="y" value="40" />
-    <option name="width" value="1392" />
-    <option name="height" value="1031" />
+    <option name="x" value="-11" />
+    <option name="y" value="-11" />
+    <option name="width" value="1943" />
+    <option name="height" value="1043" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -205,6 +224,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -212,16 +232,10 @@
               <item name="IMUandVisionFusion" type="b2602c69:ProjectViewProjectNode" />
               <item name="IMUandVisionFusion" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="IMUandVisionFusion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="IMUandVisionFusion" type="462c0819:PsiDirectoryNode" />
-              <item name="results" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -240,7 +254,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.run">
+  <component name="RunManager" selected="Python.gan_augmentation">
     <configuration name="ResNet" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="IMUandVisionFusion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -262,7 +276,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="import_dataset" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="gan_augmentation" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="IMUandVisionFusion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -274,7 +288,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/import_dataset.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gan_augmentation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -349,17 +363,17 @@
     <list>
       <item itemvalue="Python.preprocess_data" />
       <item itemvalue="Python.run" />
-      <item itemvalue="Python.import_dataset" />
       <item itemvalue="Python.model" />
       <item itemvalue="Python.ResNet" />
+      <item itemvalue="Python.gan_augmentation" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.gan_augmentation" />
         <item itemvalue="Python.run" />
         <item itemvalue="Python.preprocess_data" />
         <item itemvalue="Python.ResNet" />
         <item itemvalue="Python.model" />
-        <item itemvalue="Python.import_dataset" />
       </list>
     </recent_temporary>
   </component>
@@ -386,21 +400,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1913" y="-7" width="1295" height="695" extended-state="7" />
-    <editor active="true" />
+    <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19618745" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19618745" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.05871886" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.8611553" visible="true" weight="0.35409254" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.8616852" weight="0.19395018" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8611553" visible="true" weight="0.7740213" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.8616852" weight="0.34341636" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3291815" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4980143" weight="0.2901308" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4980143" weight="0.29003558" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.13831478" side_tool="true" weight="0.41617122" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.41103202" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -458,6 +471,21 @@
           <line>38</line>
           <option name="timeStamp" value="192" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/gan_augmentation.py</url>
+          <line>19</line>
+          <option name="timeStamp" value="201" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/gan_augmentation.py</url>
+          <line>18</line>
+          <option name="timeStamp" value="202" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/gan_augmentation.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="203" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -474,13 +502,13 @@
         <watch expression="preds" />
         <watch expression="labels" />
         <watch expression="total" />
+        <watch expression="real_img" />
+        <watch expression="img" />
+        <watch expression="training_set" />
       </configuration>
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://D:/Tool/Anaconda/Lib/site-packages/numpy/lib/npyio.py" />
-    <entry file="file://D:/Tool/Anaconda/Lib/site-packages/numpy/core/numeric.py" />
-    <entry file="file://D:/Tool/Anaconda/Lib/site-packages/numpy/lib/stride_tricks.py" />
     <entry file="file://D:/Tool/Anaconda/Lib/site-packages/numpy/core/fromnumeric.py" />
     <entry file="file://D:/Tool/Anaconda/Lib/site-packages/torch/utils/data/sampler.py" />
     <entry file="file://D:/Tool/Anaconda/Lib/re.py" />
@@ -564,13 +592,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../../../TOOL/Anaconda3/Anaconda3/Lib/site-packages/torch/utils/data/dataloader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="767" column="8" selection-start-line="767" selection-start-column="8" selection-end-line="767" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Opportunity.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="813">
@@ -609,54 +630,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="62" column="25" selection-start-line="62" selection-start-column="25" selection-end-line="62" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/definitions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="82">
-          <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/import_dataset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="146" column="8" selection-start-line="146" selection-start-column="8" selection-end-line="146" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-            <marker date="1554206185476" expanded="true" signature="785:1081" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/results/val.log">
       <provider editor-type-id="text-editor" />
       <provider selected="true" editor-type-id="LogFileEditorProvider" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="50" column="8" selection-start-line="50" selection-start-column="8" selection-end-line="50" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/results/train.log">
       <provider editor-type-id="text-editor">
@@ -668,9 +644,40 @@
       <provider editor-type-id="text-editor" />
       <provider selected="true" editor-type-id="LogFileEditorProvider" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/../../../../../TOOL/Anaconda3/Anaconda3/Lib/site-packages/torchvision/datasets/mnist.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="93" column="25" selection-start-line="93" selection-start-column="16" selection-end-line="93" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../../../TOOL/Anaconda3/Anaconda3/Lib/site-packages/torch/utils/data/dataloader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3733">
+          <caret line="233" selection-start-line="233" selection-end-line="233" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../../../TOOL/Anaconda3/Anaconda3/Lib/site-packages/torch/autograd/variable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="9" column="6" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5852">
+          <caret line="328" column="14" selection-start-line="328" selection-start-column="14" selection-end-line="328" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/validation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
+        <state relative-caret-position="570">
           <caret line="37" column="60" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="60" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
@@ -678,10 +685,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/import_dataset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="33" column="8" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+            <marker date="1554206185476" expanded="true" signature="785:1081" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
+        <state relative-caret-position="285">
+          <caret line="24" column="42" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="589">
+          <caret line="34" column="57" selection-start-line="34" selection-start-column="57" selection-end-line="34" selection-end-column="57" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/definitions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="25" column="10" selection-start-line="25" selection-start-column="10" selection-end-line="25" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="29" column="23" selection-start-line="29" selection-start-column="23" selection-end-line="29" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gan_augmentation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="191" column="16" selection-start-line="191" selection-start-column="16" selection-end-line="191" selection-end-column="16" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
