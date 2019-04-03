@@ -12,7 +12,8 @@ from sklearn.metrics import f1_score
 def train_epoch(epoch, train_loader, model, loss_function, optimizer,
                 train_logger, train_batch_logger, total, correct, f1_train_total):
     print('train at epoch {}'.format(epoch+1))
-
+    label_pred_log = Logger(
+        os.path.join(os.path.join(os.getcwd(), r'results'), 'train_label_pred.log'), ['label', 'pred'])
     model.train()
     f1_train = AverageMeter()
     batch_time = AverageMeter()
@@ -38,6 +39,8 @@ def train_epoch(epoch, train_loader, model, loss_function, optimizer,
 
         acc = get_acc(outputs, labels)
         accuracies.update(acc, seqs.size(0))
+
+        label_pred_log.log({'label': labels, 'pred': preds})
         # compute gradient and do SGD step
         optimizer.zero_grad()
         loss.backward()

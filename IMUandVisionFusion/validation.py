@@ -9,7 +9,8 @@ from sklearn.metrics import f1_score
 
 def val_epoch(epoch, valition_loader, model, loss_function, logger, total, correct,f1_val_total):
     print('validation at epoch {}'.format(epoch+1))
-
+    label_pred_log = Logger(
+        os.path.join(os.path.join(os.getcwd(), r'results'), 'val_label_pred.log'), ['label', 'pred'])
     model.eval()
     f1_val = AverageMeter()
     batch_time = AverageMeter()
@@ -34,7 +35,7 @@ def val_epoch(epoch, valition_loader, model, loss_function, logger, total, corre
 
         acc = get_acc(outputs, labels)
         accuracies.update(acc, seqs.size(0))
-
+        label_pred_log.log({'label': labels, 'pred': preds})
         total[0] += labels.size(0)
         labels_reshape = labels
         correct[0] += (preds == labels_reshape.data).sum()
