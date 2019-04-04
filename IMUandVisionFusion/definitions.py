@@ -5,7 +5,7 @@ NO_NLSTM = 0
 
 SEVER = 0
 
-pretrain_path = 1
+pretrain_path = 0
 #
 CHANNELS_OBJECT = 51
 
@@ -21,9 +21,11 @@ SLIDING_WINDOW_LENGTH = 24
 # Hardcoded step of the sliding window mechanism employed to segment the data
 SLIDING_WINDOW_STEP = 12
 
+DATA_AUGMENTATION = 1
+
 BASE_lr = 0.0003
 STEP = 5
-EPOCH = 10
+EPOCH = 300
 # Batch Size
 BATCH_SIZE = 100
 # Hardcoded number of classes in the gesture recognition problem

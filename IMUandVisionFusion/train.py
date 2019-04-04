@@ -9,6 +9,7 @@ from utils import *
 from definitions import *
 from sklearn.metrics import f1_score
 
+
 def train_epoch(epoch, train_loader, model, loss_function, optimizer,
                 train_logger, train_batch_logger, total, correct, f1_train_total):
     print('train at epoch {}'.format(epoch+1))

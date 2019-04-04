@@ -19,6 +19,7 @@ from utils import get_acc
 from train import *
 from validation import *
 from test import *
+from gan_augmentation import generator
 
 def preprocess_data(dataset_raw, dataset_processed):
 
@@ -264,10 +265,25 @@ if __name__ == '__main__':
         y_train = list(y_train)
 
         for i in range(len(y_train)):
-            x = X_train[i]
+            x = X_train[i].astype(np.float32)
             y = y_train[i]
             xy = (x, y)
             training_set.append(xy)
+        if DATA_AUGMENTATION:
+            z_dimension = 100
+            G = generator(z_dimension, 3872).cuda()  # generator model
+            pre_train_path = os.path.join(os.getcwd(),
+                                          r'dc_model\generator_epoch_450.pth')
+            pretrain = torch.load(pre_train_path)
+            G.load_state_dict(pretrain['state_dict'])
+
+            z = Variable(torch.randn(300, z_dimension)).cuda()
+            fake_x = G(z)
+            for j in range(300):
+                fx = fake_x[j].data.cpu().numpy().astype(np.float32)
+                fy = np.array([10.0]).reshape(1)
+                fake_xy = (fx,fy)
+                training_set.append(fake_xy)
 
         X_validation = list(X_validation)
         y_validation = list(y_validation)
