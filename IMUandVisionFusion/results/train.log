@@ -1,2 +1,0 @@
-epoch	loss	acc	lr	f1_score.avg
-0	tensor(1.4795, device='cuda:0')	0.6853891515181052	0.0003	0.6854667691125623
