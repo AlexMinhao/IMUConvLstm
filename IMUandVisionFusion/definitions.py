@@ -5,7 +5,7 @@ NO_NLSTM = 0
 
 SEVER = 0
 
-pretrain_path = 0
+pretrain_path = 1
 #
 CHANNELS_OBJECT = 51
 
@@ -21,13 +21,13 @@ SLIDING_WINDOW_LENGTH = 24
 # Hardcoded step of the sliding window mechanism employed to segment the data
 SLIDING_WINDOW_STEP = 12
 
-DATA_AUGMENTATION = 1
+DATA_AUGMENTATION = 0
 
-BASE_lr = 0.0003
+BASE_lr = 5*10e-6#10e-5
 STEP = 5
-EPOCH = 300
+EPOCH = 50
 # Batch Size
-BATCH_SIZE = 100
+BATCH_SIZE = 200
 # Hardcoded number of classes in the gesture recognition problem
 NUM_CLASSES = 18
 # Length of the input sequence after convolutional operations
@@ -40,5 +40,5 @@ NUM_FILTERS = 64
 FILTER_SIZE = 3
 # Number of unit in the long short-term recurrent layers
 NUM_UNITS_LSTM = 128
-NUM_LSTM_LAYERS = 4
+NUM_LSTM_LAYERS = 2
 

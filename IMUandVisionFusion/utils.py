@@ -27,7 +27,15 @@ def get_acc(output, label):
 
 def adjust_learning_rate(optimizer, epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    lr = BASE_lr * (0.5 ** (epoch // 10))
+    if pretrain_path:
+        lr = BASE_lr * (0.5 ** (epoch // 10))
+    else:
+        lr = BASE_lr
+
+        if epoch<= 50:
+            lr = BASE_lr * (1.08 ** (epoch // 10))
+        else:
+            lr = BASE_lr * 1.5 * (0.5 ** (epoch // 50))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 

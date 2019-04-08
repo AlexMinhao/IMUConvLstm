@@ -46,8 +46,8 @@ class ConvLSTM(nn.Module):
             nn.ReLU())
         self.conv4 = nn.Sequential(
             nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(1, FILTER_SIZE)),
-            # nn.BatchNorm2d(NUM_FILTERS),
-            # nn.Dropout2d(0.5),
+            nn.BatchNorm2d(NUM_FILTERS),
+            nn.Dropout2d(0.5),
             nn.ReLU())
         self.conv5 = nn.Sequential(
             nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(1, FILTER_SIZE)),
@@ -75,7 +75,7 @@ class ConvLSTM(nn.Module):
             out = out.view(-1, 64 * CHANNELS_NUM_50_TO_42)
         else:
             out = out.view(-1, 9*31, NUM_FILTERS) #CHANNELS_NUM_50
-
+            #out = out.view(-1, 9 * 33, NUM_FILTERS)
 
         h0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
         c0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))

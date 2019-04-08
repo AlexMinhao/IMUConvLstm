@@ -273,15 +273,15 @@ if __name__ == '__main__':
             z_dimension = 100
             G = generator(z_dimension, 3872).cuda()  # generator model
             pre_train_path = os.path.join(os.getcwd(),
-                                          r'dc_model\generator_epoch_450.pth')
+                                          r'dc_model\generator_16_epoch_300.pth')
             pretrain = torch.load(pre_train_path)
             G.load_state_dict(pretrain['state_dict'])
 
-            z = Variable(torch.randn(300, z_dimension)).cuda()
+            z = Variable(torch.randn(500, z_dimension)).cuda()
             fake_x = G(z)
-            for j in range(300):
+            for j in range(500):
                 fx = fake_x[j].data.cpu().numpy().astype(np.float32)
-                fy = np.array([10.0]).reshape(1)
+                fy = np.array([16.0]).reshape(1)
                 fake_xy = (fx,fy)
                 training_set.append(fake_xy)
 
@@ -319,14 +319,15 @@ if __name__ == '__main__':
     model = ConvLSTM()
     # If use CrossEntropyLoss，softmax wont be used in the final layer
     loss_function = nn.CrossEntropyLoss()
-    optimizer = optim.RMSprop(model.parameters(), lr=BASE_lr, momentum=0.9)
+    optimizer = optim.RMSprop(model.parameters(), lr=BASE_lr, momentum=0.9,weight_decay=0.0005)
+
     if torch.cuda.is_available():
         model.cuda()
         loss_function.cuda()
         print("Model on gpu")
     if pretrain_path:
         pre_train_path = os.path.join(os.getcwd(),
-                                r'results\model\model_epoch_70.pth')
+                                r'results\model_epoch_20_base.pth')
         pretrain = torch.load(pre_train_path)
         model.load_state_dict(pretrain['state_dict'])
         optimizer.load_state_dict(pretrain['optimizer'])
