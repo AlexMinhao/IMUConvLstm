@@ -27,7 +27,7 @@ BASE_lr = 0.0003
 STEP = 5
 EPOCH = 300
 # Batch Size
-BATCH_SIZE = 200
+BATCH_SIZE = 100
 # Hardcoded number of classes in the gesture recognition problem
 NUM_CLASSES = 18
 # Length of the input sequence after convolutional operations
@@ -37,8 +37,8 @@ CHECK_POINTS = 10
 # Number filters convolutional layers
 NUM_FILTERS = 64
 # Size filters convolutional layers
-FILTER_SIZE = 3
+FILTER_SIZE = 5
 # Number of unit in the long short-term recurrent layers
 NUM_UNITS_LSTM = 128
-NUM_LSTM_LAYERS = 4
+NUM_LSTM_LAYERS = 2
 
