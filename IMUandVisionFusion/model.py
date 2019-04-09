@@ -74,7 +74,7 @@ class ConvLSTM(nn.Module):
         if NO_NLSTM:
             out = out.view(-1, 64 * CHANNELS_NUM_50_TO_42)
         else:
-            out = out.view(-1, 16*113, NUM_FILTERS) #CHANNELS_NUM_50
+            out = out.view(-1, 8*113, NUM_FILTERS) #CHANNELS_NUM_50
 
 
         h0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
