@@ -19,6 +19,8 @@ def val_epoch(epoch, valition_loader, model, loss_function, logger, total, corre
     accuracies = AverageMeter()
 
     end_time = time()
+    test_pred = np.empty((0))
+    test_true = np.empty((0))
     for i, (seqs, labels) in enumerate(valition_loader):
         # measure data loading time
         data_time.update(time() - end_time)
@@ -48,11 +50,13 @@ def val_epoch(epoch, valition_loader, model, loss_function, logger, total, corre
         failure_case_Pred_label = label_for_pred_case[failure_case_ind]
         print('Failure_case_True  {0} % '.format(failure_case_True_label))
         print('Failure_case_Pred  {0} % '.format(failure_case_Pred_label))
-        f1_val.update(f1_score(labels_reshape.cpu().numpy(), preds.cpu().numpy(), average='micro'))
-        f1_val_total.update(f1_score(labels_reshape.cpu().numpy(), preds.cpu().numpy(), average='micro'))
+        f1_val.update(f1_score(labels_reshape.cpu().numpy(), preds.cpu().numpy(), average='weighted'))
+        f1_val_total.update(f1_score(labels_reshape.cpu().numpy(), preds.cpu().numpy(), average='weighted'))
 
         batch_time.update(time() - end_time)
         end_time = time()
+        test_pred = np.append(test_pred, preds.cpu().numpy(), axis=0)
+        test_true = np.append(test_true, labels_reshape.cpu().numpy(), axis=0)
 
         if (i + 1) % 1 == 0:
             print(
@@ -60,6 +64,9 @@ def val_epoch(epoch, valition_loader, model, loss_function, logger, total, corre
                 % (epoch + 1, EPOCH, i + 1, len(valition_loader), loss.item(), accuracies.avg,
                    batch_time.val, f1_val.val, f1_val.avg))
 
-    logger.log({'epoch': epoch, 'loss': losses.avg, 'acc': accuracies.avg, 'f1_score.avg': f1_val.avg})
+    f1 = f1_score(test_true, test_pred, average='weighted')
+
+    print('Accuracy of the Validation model F1-score: {0}'.format(f1))
+    logger.log({'epoch': epoch, 'loss': losses.avg, 'acc': accuracies.avg, 'f1_score.avg': f1})
 
     return losses.avg

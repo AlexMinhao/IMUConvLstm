@@ -24,6 +24,8 @@ def train_epoch(epoch, train_loader, model, loss_function, optimizer,
 
     end_time = time()
     adjust_learning_rate(optimizer, epoch)
+    test_pred = np.empty((0))
+    test_true = np.empty((0))
     for i, (seqs, labels) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time() - end_time)
@@ -61,8 +63,8 @@ def train_epoch(epoch, train_loader, model, loss_function, optimizer,
         # print('Failure_case_True  {0} % '.format(failure_case_True_label))
         # print('Failure_case_Pred  {0} % '.format(failure_case_Pred_label))
 
-        f1_train.update(f1_score(labels_reshape.cpu().numpy(), preds.cpu().numpy(), average='micro'))
-        f1_train_total.update(f1_score(labels_reshape.cpu().numpy(), preds.cpu().numpy(), average='micro'))
+        f1_train.update(f1_score(labels_reshape.cpu().numpy(), preds.cpu().numpy(), average='weighted'))
+        f1_train_total.update(f1_score(labels_reshape.cpu().numpy(), preds.cpu().numpy(), average='weighted'))
         batch_time.update(time() - end_time)
         end_time = time()
 
@@ -76,7 +78,8 @@ def train_epoch(epoch, train_loader, model, loss_function, optimizer,
             'Failure_case_True': failure_case_True_label,
             'Failure_case_Pred': failure_case_Pred_label
         })
-
+        test_pred = np.append(test_pred, preds.cpu().numpy(), axis=0)
+        test_true = np.append(test_true, labels_reshape.cpu().numpy(), axis=0)
 
         if (i + 1) % 10 == 0:
             print(
@@ -84,12 +87,14 @@ def train_epoch(epoch, train_loader, model, loss_function, optimizer,
                 % (epoch + 1, EPOCH, i + 1, len(train_loader), loss.item(), accuracies.avg,
                    batch_time.val, f1_train.val, f1_train.avg, optimizer.param_groups[0]['lr']))
 
+    f1 = f1_score(test_true, test_pred, average='weighted')
+    print('Accuracy of the Train model F1-score: {0}'.format(f1))
     train_logger.log({
         'epoch': epoch,
         'loss': losses.avg,
         'acc': accuracies.avg,
         'lr': optimizer.param_groups[0]['lr'],
-        'f1_score.avg':f1_train.avg
+        'f1_score.avg': f1
     })
 
     if epoch % CHECK_POINTS == 0:

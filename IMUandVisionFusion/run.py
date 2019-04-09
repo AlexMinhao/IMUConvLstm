@@ -319,14 +319,14 @@ if __name__ == '__main__':
     model = ConvLSTM()
     # If use CrossEntropyLoss，softmax wont be used in the final layer
     loss_function = nn.CrossEntropyLoss()
-    optimizer = optim.RMSprop(model.parameters(), lr=BASE_lr, momentum=0.9)
+    optimizer = optim.RMSprop(model.parameters(), lr=BASE_lr, momentum = 0.9, weight_decay= 0.9)
     if torch.cuda.is_available():
         model.cuda()
         loss_function.cuda()
         print("Model on gpu")
     if pretrain_path:
         pre_train_path = os.path.join(os.getcwd(),
-                                r'results\model\model_epoch_70.pth')
+                                r'results\model_epoch_4_base1.pth')
         pretrain = torch.load(pre_train_path)
         model.load_state_dict(pretrain['state_dict'])
         optimizer.load_state_dict(pretrain['optimizer'])
@@ -346,8 +346,8 @@ if __name__ == '__main__':
                     train_logger, train_batch_logger, train_total, train_correct, f1_train_total)
         val_epoch(epoch, validation_loader, model, loss_function, val_logger, val_total, val_correct, f1_val_total)
 
-    print('Accuracy of the Train model  {0} %, F1-score: {1}'.format(100 * train_correct[0] / train_total[0], f1_train_total.avg))
-    print('Accuracy of the Validation model  {0} %, F1-score: {1}'.format(100 * val_correct[0] / val_total[0], f1_val_total.avg))
+    # print('Accuracy of the Train model  {0} %, F1-score: {1}'.format(100 * train_correct[0] / train_total[0], f1_train_total.avg))
+    # print('Accuracy of the Validation model  {0} %, F1-score: {1}'.format(100 * val_correct[0] / val_total[0], f1_val_total.avg))
 
 
     # Test the model ####################################
@@ -358,7 +358,8 @@ if __name__ == '__main__':
     model.eval()
     correct = 0
     total = 0
-
+    test_pred = np.empty((0))
+    test_true = np.empty((0))
     for i, (seqs, labels) in enumerate(test_loader):
         # measure data loading time
         data_time.update(time() - end_time)
@@ -382,6 +383,10 @@ if __name__ == '__main__':
         print('Failure_case_True  {0} % '.format(failure_case_True_label))
         print('Failure_case_Pred  {0} % '.format(failure_case_Pred_label))
 
-        f1_test.update(f1_score(labels_reshape.cpu().numpy(), predicted.cpu().numpy(), average='micro'))
-    print('Test Accuracy of the model  {0}%, F1-score {1}%'.format(100 * correct / total, f1_test.avg))
+        f1_test.update(f1_score(labels_reshape.cpu().numpy(), predicted.cpu().numpy(), average='weighted'))
+        test_pred = np.append(test_pred, predicted.cpu().numpy(), axis=0)
+        test_true = np.append(test_true, labels_reshape.cpu().numpy(), axis=0)
+
+    f1 = f1_score(test_true, test_pred, average='weighted')
+    print('Test Accuracy of the model  {0}%, F1-score {1}%'.format(100 * correct / total, f1))
 
