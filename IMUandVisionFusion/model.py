@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from torch.autograd import Variable
 from definitions import *
+from GraphConv import ConvTemporalGraphical
 # ### Define the Lasagne network
 '''
 Sensor data are processed by four convolutional layer which allow to learn features from the data.
@@ -93,6 +94,44 @@ class ConvLSTM(nn.Module):
             out = self.fc(out[:, -1, :])
         return out
 
+
+class gcn_lstm(nn.Module):
+    def __init__(self,
+                 in_channels,
+                 out_channels,
+                 kernel_size,
+                 stride=1,
+                 dropout=0,
+                 ):
+        super(gcn_lstm, self).__init__()
+        padding = ((kernel_size[0] - 1) // 2, 0)
+
+        self.gcn = ConvTemporalGraphical(in_channels, out_channels,
+                                         kernel_size[1])
+
+        self.tcn = nn.Sequential(
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(
+                out_channels,
+                out_channels,
+                (kernel_size[0], 1),
+                (stride, 1),
+                padding,
+            ),
+            nn.BatchNorm2d(out_channels),
+            nn.Dropout(dropout, inplace=True),
+        )
+
+        self.relu = nn.ReLU(inplace=True)
+
+    def forward(self, x, A):
+
+        res = self.residual(x)
+        x, A = self.gcn(x, A)
+        x = self.tcn(x) + res
+
+        return self.relu(x), A
 
 if __name__ == '__main__':
     model = ConvLSTM()
