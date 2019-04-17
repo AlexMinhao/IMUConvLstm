@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     print("Loading data...")
 
-    if DATAFORMAT:
+    if DATAFORMAT == 1:
 
         Opp = OPPORTUNITY(path)
         X_train, y_train, X_validation, y_validation, X_test, y_test = Opp.load() #load_dataset(dp)
@@ -113,6 +113,30 @@ if __name__ == '__main__':
         # X_test = X_test[1:300]
         # y_test = y_test[1:300]
         print(" after reshape: inputs {0}, targets {1}".format(X_train.shape, y_train.shape))
+    elif DATAFORMAT == 2:
+        Opp = OPPORTUNITY(path)
+        X_train, y_train, X_validation, y_validation, X_test, y_test = Opp.load()  # load_dataset(dp)
+        assert NB_SENSOR_CHANNELS_113 == X_train.shape[2]
+
+        print(" ..after sliding window (training): inputs {0}, targets {1}".format(X_train.shape, y_train.shape))
+        print(" ..after sliding window (validation): inputs {0}, targets {1}".format(X_validation.shape,
+                                                                                     y_validation.shape))
+        print(" ..after sliding window (testing): inputs {0}, targets {1}".format(X_test.shape, y_test.shape))
+        X_test = buildgraph(X_test)
+        X_test = X_test.reshape((-1, SLIDING_WINDOW_LENGTH, 7, 9))
+        X_test = X_test.transpose(0, 3, 1, 2)
+        X_test.astype(np.float32), y_test.reshape(len(y_test)).astype(np.uint8)
+
+        X_train= buildgraph(X_train)
+        X_train = X_train.reshape((-1, SLIDING_WINDOW_LENGTH, 7, 9))
+        X_train = X_train.transpose(0, 3, 1, 2)
+        X_train.astype(np.float32), y_train.reshape(len(y_train)).astype(np.uint8)
+
+        X_validation = buildgraph(X_validation)
+        X_validation = X_validation.reshape((-1, SLIDING_WINDOW_LENGTH, 7, 9))
+        X_validation = X_validation.transpose(0, 3, 1, 2)
+        X_validation.astype(np.float32), y_validation.reshape(len(y_validation)).astype(np.uint8)
+
     else:
         Opp = OPPORTUNITY(path)
         X_train, y_train, X_validation, y_validation, X_test, y_test = Opp.load()  # load_dataset(dp)
@@ -139,7 +163,7 @@ if __name__ == '__main__':
     testing_set = []
 
 
-    if DATAFORMAT:
+    if DATAFORMAT==1:
         if CONTAIN_NULLCLASS:
             X_train = list(X_train)
             y_train = list(y_train)

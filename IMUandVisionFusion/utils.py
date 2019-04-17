@@ -7,6 +7,14 @@ from torch.autograd import Variable
 import csv
 from definitions import *
 import os
+import numpy as np
+
+def buildgraph(data):
+
+    features_delete = np.arange(0, 36)
+    features_delete = np.concatenate([features_delete, np.arange(90, 97)])
+    features_delete = np.concatenate([features_delete, np.arange(106, 113)])
+    return np.delete(data, features_delete, 2)
 
 def checkpoint(epoch, model,optimizer):
     model_out_path = os.path.join(os.getcwd(), r'results', "model_epoch_{}.pth".format(epoch))

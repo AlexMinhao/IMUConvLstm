@@ -1,11 +1,11 @@
 #
-DATAFORMAT = 0
+DATAFORMAT = 2
 CONTAIN_NULLCLASS = 1
 NO_NLSTM = 0
 
 SEVER = 0
 
-pretrain_path = 1
+pretrain_path = 0
 #
 CHANNELS_OBJECT = 51
 
@@ -23,7 +23,7 @@ SLIDING_WINDOW_STEP = 12
 
 DATA_AUGMENTATION = 0
 
-BASE_lr = 0.5*10e-7
+BASE_lr = 3*10e-5
 STEP = 5
 EPOCH = 21
 # Batch Size
@@ -42,3 +42,6 @@ FILTER_SIZE = 5
 NUM_UNITS_LSTM = 128
 NUM_LSTM_LAYERS = 2
 
+
+#
+in_channel_gcn = 9

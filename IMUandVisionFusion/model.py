@@ -3,6 +3,9 @@ import torch.nn as nn
 from torch.autograd import Variable
 from definitions import *
 from GraphConv import ConvTemporalGraphical
+from graph import Graph
+from utils import get_variable
+import numpy as np
 # ### Define the Lasagne network
 '''
 Sensor data are processed by four convolutional layer which allow to learn features from the data.
@@ -31,67 +34,99 @@ Layer6[     128       ]                                       =>
 class ConvLSTM(nn.Module):
     def __init__(self):
         super(ConvLSTM, self).__init__()
+        self.graph = Graph()
+        self.A = torch.tensor(self.graph.A, dtype=torch.float32, requires_grad=False)
+        self.A = get_variable(self.A)
+        # build networks
+        spatial_kernel_size = self.A.size(0)
+        temporal_kernel_size = 24
+        kernel_size = (temporal_kernel_size, spatial_kernel_size)  # 9 * 2
+        self.data_bn = nn.BatchNorm1d(in_channel_gcn * self.A.size(1))
+        self.gcn_lstm_networks = nn.ModuleList((
+            gcn_lstm(in_channel_gcn, NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
+        ))
 
-        self.conv1 = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
-            nn.ReLU())
-        self.conv2 = nn.Sequential(
-            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
-            nn.BatchNorm2d(NUM_FILTERS),
-            nn.Dropout2d(0.5),
-            nn.ReLU())
-        self.conv3 = nn.Sequential(
-            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
-            nn.BatchNorm2d(NUM_FILTERS),
-            nn.Dropout2d(0.5),
-            nn.ReLU())
-        self.conv4 = nn.Sequential(
-            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
-            # nn.BatchNorm2d(NUM_FILTERS),
-            # nn.Dropout2d(0.5),
-            nn.ReLU())
-        self.conv5 = nn.Sequential(
-            nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(1, FILTER_SIZE)),
-            # nn.BatchNorm2d(NUM_FILTERS),
-            # nn.Dropout2d(0.5),
-            nn.ReLU())
-        self.lstm = nn.LSTM(NUM_FILTERS, NUM_UNITS_LSTM, NUM_LSTM_LAYERS, batch_first=True)
-        if NO_NLSTM:
-            self.fc = nn.Linear(64 * 105, NUM_CLASSES)
-        else:
-            self.fc = nn.Linear(NUM_UNITS_LSTM, NUM_CLASSES)
+        self.edge_importance = [1] * len(self.gcn_lstm_networks)
+        self.fcn = nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=1)
+        self.fc = nn.Linear(64*22*7, NUM_CLASSES)
+        # self.conv1 = nn.Sequential(
+        #     nn.Conv2d(in_channels=1, out_channels=NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
+        #     nn.ReLU())
+        # self.conv2 = nn.Sequential(
+        #     nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
+        #     nn.BatchNorm2d(NUM_FILTERS),
+        #     nn.Dropout2d(0.5),
+        #     nn.ReLU())
+        # self.conv3 = nn.Sequential(
+        #     nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
+        #     nn.BatchNorm2d(NUM_FILTERS),
+        #     nn.Dropout2d(0.5),
+        #     nn.ReLU())
+        # self.conv4 = nn.Sequential(
+        #     nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
+        #     # nn.BatchNorm2d(NUM_FILTERS),
+        #     # nn.Dropout2d(0.5),
+        #     nn.ReLU())
+        # self.conv5 = nn.Sequential(
+        #     nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=(1, FILTER_SIZE)),
+        #     # nn.BatchNorm2d(NUM_FILTERS),
+        #     # nn.Dropout2d(0.5),
+        #     nn.ReLU())
+        # self.lstm = nn.LSTM(NUM_FILTERS, NUM_UNITS_LSTM, NUM_LSTM_LAYERS, batch_first=True)
+        # if NO_NLSTM:
+        #     self.fc = nn.Linear(64 * 105, NUM_CLASSES)
+        # else:
+        #     self.fc = nn.Linear(NUM_UNITS_LSTM, NUM_CLASSES)
 
     def forward(self, x):
-        # print (x.shape)
-        out = self.conv1(x)
-        # print (out.shape)
-        out = self.conv2(out)
-        # print (out.shape)
-        out = self.conv3(out)
-        # print (out.shape)
-        out = self.conv4(out)
-        # print (out.shape)
-        # out = out.view(-1, NB_SENSOR_CHANNELS, NUM_FILTERS)
-        if NO_NLSTM:
-            out = out.view(-1, 64 * CHANNELS_NUM_50_TO_42)
-        else:
-            out = out.view(-1, 8*113, NUM_FILTERS) #CHANNELS_NUM_50
+        # data normalization
+        # 100 9 24 7
+        N, C, T, V = x.size()
+        x = x.permute(0, 3, 1, 2).contiguous()
+        x = x.view(N, V * C, T)
+        x = self.data_bn(x)
+        x = x.view(N, V, C, T)
+        x = x.permute(0, 1, 3, 2).contiguous()
+        x = x.view(N, C, T, V)
 
+        for gcn, importance in zip(self.gcn_lstm_networks, self.edge_importance):
+            x, _ = gcn(x, self.A * importance)
 
-        h0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
-        c0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
-        if torch.cuda.is_available():
-            h0, c0 = h0.cuda(), c0.cuda()
-
-        # forward propagate rnn
-
-
-        if NO_NLSTM:
-            out = self.fc(out)
-        else:
-            out, _ = self.lstm(out, (h0, c0))
-            #  out[:, -1, :] -> [100,11,128] ->[100,128]
-            out = self.fc(out[:, -1, :])
+        out = self.fcn(x)
+        out = out.view(-1, 64 * 22 * 7)
+        out = self.fc(out)
+        # out = out.view(out.size(0), 18,-1)
+        # # print (x.shape)
+        # out = self.conv1(x)
+        # # print (out.shape)
+        # out = self.conv2(out)
+        # # print (out.shape)
+        # out = self.conv3(out)
+        # # print (out.shape)
+        # out = self.conv4(out)
+        # # print (out.shape)
+        # # out = out.view(-1, NB_SENSOR_CHANNELS, NUM_FILTERS)
+        # if NO_NLSTM:
+        #     out = out.view(-1, 64 * CHANNELS_NUM_50_TO_42)
+        # else:
+        #     out = out.view(-1, 8*113, NUM_FILTERS) #CHANNELS_NUM_50
+        #
+        #
+        # h0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
+        # c0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
+        # if torch.cuda.is_available():
+        #     h0, c0 = h0.cuda(), c0.cuda()
+        #
+        # # forward propagate rnn
+        #
+        #
+        # if NO_NLSTM:
+        #     out = self.fc(out)
+        # else:
+        #     out, _ = self.lstm(out, (h0, c0))
+        #     #  out[:, -1, :] -> [100,11,128] ->[100,128]
+        #     out = self.fc(out[:, -1, :])
         return out
 
 
@@ -104,7 +139,7 @@ class gcn_lstm(nn.Module):
                  dropout=0,
                  ):
         super(gcn_lstm, self).__init__()
-        padding = ((kernel_size[0] - 1) // 2, 0)
+        padding = ((kernel_size[0]-1) // 2, 0)
 
         self.gcn = ConvTemporalGraphical(in_channels, out_channels,
                                          kernel_size[1])
@@ -127,16 +162,24 @@ class gcn_lstm(nn.Module):
 
     def forward(self, x, A):
 
-        res = self.residual(x)
+        # res = self.residual(x)
         x, A = self.gcn(x, A)
-        x = self.tcn(x) + res
+        x = self.tcn(x)
 
         return self.relu(x), A
+
+
+
+
 
 if __name__ == '__main__':
     model = ConvLSTM()
     print(model)  # net architecture
-
+    # N C T V
+    x = torch.zeros(100, 9, 24, 7)
+    x = Variable(x)
+    out = model(x)
+    print(out[1])
     '''
     ConvLSTM(
   (conv1): Sequential(
