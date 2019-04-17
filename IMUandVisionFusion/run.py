@@ -289,10 +289,13 @@ if __name__ == '__main__':
         y_validation = list(y_validation)
 
         for j in range(len(y_validation)):
-            x = X_validation[j]
+            x = X_validation[j].astype(np.float32)
             y = y_validation[j]
             xy = (x, y)
             validation_set.append(xy)
+
+        training_set = training_set + validation_set
+
 
         X_test = list(X_test)
         y_test = list(y_test)
@@ -305,7 +308,7 @@ if __name__ == '__main__':
 
 
     train_loader = DataLoader(dataset=training_set, batch_size=BATCH_SIZE, shuffle=True)
-    validation_loader = DataLoader(dataset=validation_set, batch_size=BATCH_SIZE, shuffle=True)
+    validation_loader = DataLoader(dataset=testing_set, batch_size=BATCH_SIZE, shuffle=True)
     test_loader = DataLoader(dataset=testing_set, batch_size=BATCH_SIZE, shuffle=True)
     train_logger = Logger(
         os.path.join(result_path, 'train.log'),
@@ -326,7 +329,7 @@ if __name__ == '__main__':
         print("Model on gpu")
     if pretrain_path:
         pre_train_path = os.path.join(os.getcwd(),
-                                r'results\model_epoch_4_base1.pth')
+                                r'results\model_epoch_2_9033.pth')
         pretrain = torch.load(pre_train_path)
         model.load_state_dict(pretrain['state_dict'])
         optimizer.load_state_dict(pretrain['optimizer'])

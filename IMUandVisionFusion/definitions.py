@@ -23,7 +23,7 @@ SLIDING_WINDOW_STEP = 12
 
 DATA_AUGMENTATION = 0
 
-BASE_lr = 0.5*10e-7
+BASE_lr = 0.1e-06
 STEP = 5
 EPOCH = 21
 # Batch Size
