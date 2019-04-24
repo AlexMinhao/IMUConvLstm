@@ -40,10 +40,10 @@ def adjust_learning_rate(optimizer, epoch):
     else:
         lr = BASE_lr
 
-        if epoch<= 50:
-            lr = BASE_lr * (1.08 ** (epoch // 10))
-        else:
-            lr = BASE_lr * 1.5 * (0.5 ** (epoch // 50))
+        # if epoch<= 10:
+        #     lr = BASE_lr * (1.08 ** (epoch // 2))
+        # else:
+        #     lr = BASE_lr * 1.5 * (0.5 ** (epoch // 10))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 

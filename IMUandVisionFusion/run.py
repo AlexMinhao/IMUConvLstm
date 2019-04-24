@@ -350,7 +350,7 @@ if __name__ == '__main__':
         print("Model on gpu")
     if pretrain_path:
         pre_train_path = os.path.join(os.getcwd(),
-                                r'results\model_epoch_4_base1.pth')
+                                r'results\model_epoch_30_base55.pth')
         pretrain = torch.load(pre_train_path)
         model.load_state_dict(pretrain['state_dict'])
         optimizer.load_state_dict(pretrain['optimizer'])

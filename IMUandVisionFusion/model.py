@@ -44,12 +44,15 @@ class ConvLSTM(nn.Module):
         self.data_bn = nn.BatchNorm1d(in_channel_gcn * self.A.size(1))
         self.gcn_lstm_networks = nn.ModuleList((
             gcn_lstm(in_channel_gcn, NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(NUM_FILTERS, 2*NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(2*NUM_FILTERS, 2*NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(2*NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
             gcn_lstm(NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
         ))
 
         self.edge_importance = [1] * len(self.gcn_lstm_networks)
         self.fcn = nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=1)
-        self.fc = nn.Linear(64*22*7, NUM_CLASSES)
+        self.fc = nn.Linear(64*19*7, NUM_CLASSES)
         # self.conv1 = nn.Sequential(
         #     nn.Conv2d(in_channels=1, out_channels=NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
         #     nn.ReLU())
@@ -94,7 +97,7 @@ class ConvLSTM(nn.Module):
             x, _ = gcn(x, self.A * importance)
 
         out = self.fcn(x)
-        out = out.view(-1, 64 * 22 * 7)
+        out = out.view(-1, 64 * 19 * 7)
         out = self.fc(out)
         # out = out.view(out.size(0), 18,-1)
         # # print (x.shape)

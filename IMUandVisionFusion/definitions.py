@@ -5,7 +5,7 @@ NO_NLSTM = 0
 
 SEVER = 0
 
-pretrain_path = 0
+pretrain_path = 1
 #
 CHANNELS_OBJECT = 51
 
@@ -23,9 +23,9 @@ SLIDING_WINDOW_STEP = 12
 
 DATA_AUGMENTATION = 0
 
-BASE_lr = 3*10e-5
+BASE_lr = 0.01*10e-7
 STEP = 5
-EPOCH = 21
+EPOCH = 101
 # Batch Size
 BATCH_SIZE = 200
 # Hardcoded number of classes in the gesture recognition problem
