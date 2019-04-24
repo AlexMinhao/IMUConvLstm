@@ -340,7 +340,7 @@ if __name__ == '__main__':
     val_logger = Logger(
         os.path.join(result_path, 'val.log'), ['epoch', 'loss', 'acc', 'f1_score.avg'])
 
-    model = ConvLSTM()
+    model = ConvLSTM(9, 18)
     # If use CrossEntropyLoss，softmax wont be used in the final layer
     loss_function = nn.CrossEntropyLoss()
     optimizer = optim.RMSprop(model.parameters(), lr=BASE_lr, momentum = 0.9, weight_decay= 0.9)

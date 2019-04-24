@@ -5,7 +5,7 @@ NO_NLSTM = 0
 
 SEVER = 0
 
-pretrain_path = 1
+pretrain_path = 0
 #
 CHANNELS_OBJECT = 51
 
@@ -44,4 +44,3 @@ NUM_LSTM_LAYERS = 2
 
 
 #
-in_channel_gcn = 9

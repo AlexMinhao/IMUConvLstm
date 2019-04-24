@@ -4,6 +4,7 @@ from torch.autograd import Variable
 from definitions import *
 from GraphConv import ConvTemporalGraphical
 from graph import Graph
+import torch.nn.functional as F
 from utils import get_variable
 import numpy as np
 # ### Define the Lasagne network
@@ -32,18 +33,18 @@ Layer6[     128       ]                                       =>
 '''
 
 class ConvLSTM(nn.Module):
-    def __init__(self):
+    def __init__(self, in_channels, num_class):
         super(ConvLSTM, self).__init__()
         self.graph = Graph()
         self.A = torch.tensor(self.graph.A, dtype=torch.float32, requires_grad=False)
         self.A = get_variable(self.A)
         # build networks
         spatial_kernel_size = self.A.size(0)
-        temporal_kernel_size = 24
-        kernel_size = (temporal_kernel_size, spatial_kernel_size)  # 9 * 2
-        self.data_bn = nn.BatchNorm1d(in_channel_gcn * self.A.size(1))
+        temporal_kernel_size = 5
+        kernel_size = (temporal_kernel_size, spatial_kernel_size)  #  * 2
+        self.data_bn = nn.BatchNorm1d(in_channels * self.A.size(1))
         self.gcn_lstm_networks = nn.ModuleList((
-            gcn_lstm(in_channel_gcn, NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(in_channels, NUM_FILTERS, kernel_size, 1),
             gcn_lstm(NUM_FILTERS, 2*NUM_FILTERS, kernel_size, 1),
             gcn_lstm(2*NUM_FILTERS, 2*NUM_FILTERS, kernel_size, 1),
             gcn_lstm(2*NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
@@ -51,8 +52,8 @@ class ConvLSTM(nn.Module):
         ))
 
         self.edge_importance = [1] * len(self.gcn_lstm_networks)
-        self.fcn = nn.Conv2d(NUM_FILTERS, NUM_FILTERS, kernel_size=1)
-        self.fc = nn.Linear(64*19*7, NUM_CLASSES)
+        self.fcn = nn.Conv2d(NUM_FILTERS, num_class, kernel_size=1)
+
         # self.conv1 = nn.Sequential(
         #     nn.Conv2d(in_channels=1, out_channels=NUM_FILTERS, kernel_size=(FILTER_SIZE, 1)),
         #     nn.ReLU())
@@ -96,9 +97,11 @@ class ConvLSTM(nn.Module):
         for gcn, importance in zip(self.gcn_lstm_networks, self.edge_importance):
             x, _ = gcn(x, self.A * importance)
 
+        x = F.avg_pool2d(x, x.size()[2:])
+        x = x.view(N,  -1, 1, 1)
         out = self.fcn(x)
-        out = out.view(-1, 64 * 19 * 7)
-        out = self.fc(out)
+        out = out.view(out.size(0), -1)
+
         # out = out.view(out.size(0), 18,-1)
         # # print (x.shape)
         # out = self.conv1(x)
@@ -166,7 +169,7 @@ class gcn_lstm(nn.Module):
     def forward(self, x, A):
 
         # res = self.residual(x)
-        x, A = self.gcn(x, A)
+        x, A = self.gcn(x, A) #100 64 24 7
         x = self.tcn(x)
 
         return self.relu(x), A
@@ -176,7 +179,10 @@ class gcn_lstm(nn.Module):
 
 
 if __name__ == '__main__':
-    model = ConvLSTM()
+    in_channels = 9
+    num_class = 18
+    edge_importance_weighting = True
+    model = ConvLSTM(in_channels,num_class)
     print(model)  # net architecture
     # N C T V
     x = torch.zeros(100, 9, 24, 7)
