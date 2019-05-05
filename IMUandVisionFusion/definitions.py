@@ -5,7 +5,7 @@ NO_NLSTM = 0
 
 SEVER = 0
 
-pretrain_path = 1
+pretrain_path = 0
 #
 CHANNELS_OBJECT = 51
 
