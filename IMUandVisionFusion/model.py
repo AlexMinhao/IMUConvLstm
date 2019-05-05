@@ -40,15 +40,17 @@ class ConvLSTM(nn.Module):
         self.A = get_variable(self.A)
         # build networks
         spatial_kernel_size = self.A.size(0)
-        temporal_kernel_size = 5
+        temporal_kernel_size = 9
         kernel_size = (temporal_kernel_size, spatial_kernel_size)  #  * 2
         self.data_bn = nn.BatchNorm1d(in_channels * self.A.size(1))
         self.gcn_lstm_networks = nn.ModuleList((
             gcn_lstm(in_channels, NUM_FILTERS, kernel_size, 1),
-            gcn_lstm(NUM_FILTERS, 2*NUM_FILTERS, kernel_size, 1),
-            gcn_lstm(2*NUM_FILTERS, 2*NUM_FILTERS, kernel_size, 1),
-            gcn_lstm(2*NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
             gcn_lstm(NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(NUM_FILTERS, 2 * NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(2*NUM_FILTERS, 2 * NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(2*NUM_FILTERS, 4*NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(4*NUM_FILTERS, 2*NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(2*NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
         ))
 
         self.edge_importance = [1] * len(self.gcn_lstm_networks)
@@ -164,11 +166,20 @@ class gcn_lstm(nn.Module):
             nn.Dropout(dropout, inplace=True),
         )
 
+        self.residual = nn.Sequential(
+            nn.Conv2d(
+                in_channels,
+                out_channels,
+                kernel_size=1,
+                stride=(stride, 1)),
+            nn.BatchNorm2d(out_channels),
+        )
+
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, x, A):
 
-        # res = self.residual(x)
+        res = self.residual(x)
         x, A = self.gcn(x, A) #100 64 24 7
         x = self.tcn(x)
 
