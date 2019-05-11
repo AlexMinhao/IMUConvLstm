@@ -80,8 +80,8 @@ class ConvLSTM(nn.Module):
 
         h0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
         c0 = Variable(torch.zeros(NUM_LSTM_LAYERS, out.size(0), NUM_UNITS_LSTM))
-        # if torch.cuda.is_available():
-        #     h0, c0 = h0.cuda(), c0.cuda()
+        if torch.cuda.is_available():
+            h0, c0 = h0.cuda(), c0.cuda()
 
         # forward propagate rnn
 

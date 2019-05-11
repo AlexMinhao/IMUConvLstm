@@ -1,7 +1,7 @@
 #
 DATAFORMAT = 0
 CONTAIN_NULLCLASS = 1
-NO_NLSTM = 1
+NO_NLSTM = 0
 
 SEVER = 0
 
@@ -27,7 +27,7 @@ BASE_lr = 0.1e-06
 STEP = 5
 EPOCH = 21
 # Batch Size
-BATCH_SIZE = 200
+BATCH_SIZE = 100
 # Hardcoded number of classes in the gesture recognition problem
 NUM_CLASSES = 18
 # Length of the input sequence after convolutional operations
