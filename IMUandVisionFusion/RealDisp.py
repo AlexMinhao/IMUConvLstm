@@ -43,7 +43,12 @@ def load_set(window_size, overlay):
     print('Processing Data')
 
     file_names = ['ideal', 'self', 'mutual4', 'mutual5', 'mutual6', 'mutual7']
-    root = 'C:\ALEX\Doc\paper\PytorchTuto'
+    root = os.path.dirname(os.path.dirname(os.getcwd()))
+        #
+    # f = open('test.txt', 'w')
+    # path =  os.path.join(root ,'Subject' + '_preprocessed.txt')
+    # open(path, 'wb')
+
     # subjects (17)
     for i in range(1, 18):
 
@@ -51,7 +56,7 @@ def load_set(window_size, overlay):
 
         # different trials (max 6)
         for j in range(0, 6):
-            root = os.path.dirname(os.path.dirname(os.getcwd()))
+
             p = 'REALDISP\\realistic_sensor_displacement\\subject' + str(i) + '_' + file_names[j] + '.log'
             path = os.path.join(root, p)
             if not os.path.exists(path):
@@ -64,17 +69,22 @@ def load_set(window_size, overlay):
             raw_data = raw_data.dropna().values.astype(float)
 
             if j == 0:
+                print('sliding_window ')
                 data = sliding_window(raw_data, window_size, overlay, j)
             else:
                 data = np.concatenate((data, sliding_window(raw_data, window_size, overlay, j)), axis=0)
             del raw_data
 
         #### manage labels
+        print(' manage labels ')
         data = np.concatenate((np.repeat([[i]], data.shape[0], axis=0), data), axis=1)
 
         #### DUMP to pickle !!!!!
+        print('DUMP to pickle')
         path = root
-        pickle.dump(data, open(path + 'Subject' + str(i) + '_preprocessed.txt', 'wb'), pickle.HIGHEST_PROTOCOL)
+        path = os.path.join(root, 'Subject' + str(i)+ '_preprocessed.txt')
+        print(path)
+        pickle.dump(data, open(path, 'wb'), pickle.HIGHEST_PROTOCOL)
 
         print(data.shape)
         del data
