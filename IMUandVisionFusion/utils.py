@@ -38,7 +38,7 @@ def adjust_learning_rate(optimizer, epoch):
     if pretrain_path:
         lr = BASE_lr #* (0.5 ** (epoch // 2))
     else:
-        lr = BASE_lr * (0.5 ** (epoch //50))
+        lr = BASE_lr * (0.5 ** (epoch //10))
 
         # if epoch<= 10:
         #     lr = BASE_lr * (1.08 ** (epoch // 2))

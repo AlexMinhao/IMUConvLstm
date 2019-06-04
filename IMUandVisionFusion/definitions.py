@@ -25,7 +25,7 @@ DATA_AUGMENTATION = 0
 
 BASE_lr = 10e-4
 STEP = 5
-EPOCH = 301
+EPOCH = 101
 # Batch Size
 BATCH_SIZE = 100
 # Hardcoded number of classes in the gesture recognition problem
@@ -33,7 +33,7 @@ NUM_CLASSES = 18
 # Length of the input sequence after convolutional operations
 FINAL_SEQUENCE_LENGTH = 8
 
-CHECK_POINTS = 30
+CHECK_POINTS = 10
 # Number filters convolutional layers
 NUM_FILTERS = 64
 # Size filters convolutional layers

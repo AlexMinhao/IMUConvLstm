@@ -45,12 +45,12 @@ class ConvLSTM(nn.Module):
         self.data_bn = nn.BatchNorm1d(in_channels*self.A.size(1))
         self.gcn_lstm_networks = nn.ModuleList((
             gcn_lstm(in_channels, NUM_FILTERS, kernel_size, 1),
-            gcn_lstm(NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
-            gcn_lstm(NUM_FILTERS, 2 * NUM_FILTERS, kernel_size, 1),
-            gcn_lstm(2*NUM_FILTERS, 2 * NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(NUM_FILTERS, 2*NUM_FILTERS, kernel_size, 1),
             gcn_lstm(2*NUM_FILTERS, 4*NUM_FILTERS, kernel_size, 1),
-            gcn_lstm(4*NUM_FILTERS, 2*NUM_FILTERS, kernel_size, 1),
-            gcn_lstm(2*NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(4*NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
+            gcn_lstm(NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
+          #  gcn_lstm(4*NUM_FILTERS, 2*NUM_FILTERS, kernel_size, 1),
+           # gcn_lstm(2*NUM_FILTERS, NUM_FILTERS, kernel_size, 1),
         ))
 
         self.edge_importance = [1] * len(self.gcn_lstm_networks)
@@ -65,18 +65,24 @@ class ConvLSTM(nn.Module):
         xa = x[:, 0:3, :, :] # 100 3 24 7
         xg = x[:, 3:6, :, :]
         xm = x[:, 6:9, :, :]
-        xa = xa.view(N, V * 3, T)
-        xg = xg.view(N, V * 3, T)
-        xm = xm.view(N, V * 3, T)
-        xa = self.data_bn(xa)
-        xg = self.data_bn(xg)
-        xm = self.data_bn(xm)
-        xa = xa.view(N, V, 3, T)
-        xa = xa.permute(0, 2, 3, 1).contiguous()
-        xg = xg.view(N, V, 3, T)
-        xg = xg.permute(0, 2, 3, 1).contiguous()
-        xm = xm.view(N, V, 3, T)
-        xm = xm.permute(0, 2, 3, 1).contiguous()
+
+        # xa = xa.permute(0, 1, 3, 2).contiguous()
+        # xg = xg.permute(0, 1, 3, 2).contiguous()
+        # xm = xm.permute(0, 1, 3, 2).contiguous()
+
+        # xa = xa.view(N, V * 3, T)
+        # xg = xg.view(N, V * 3, T)
+        # xm = xm.view(N, V * 3, T)
+        # xa = self.data_bn(xa)
+        # xg = self.data_bn(xg)
+        # xm = self.data_bn(xm)
+
+        # xa = xa.view(N, V, 3, T)
+        # xa = xa.permute(0, 2, 3, 1).contiguous()
+        # xg = xg.view(N, V, 3, T)
+        # xg = xg.permute(0, 2, 3, 1).contiguous()
+        # xm = xm.view(N, V, 3, T)
+        # xm = xm.permute(0, 2, 3, 1).contiguous()
 
 
         for gcn, importance in zip(self.gcn_lstm_networks, self.edge_importance):
@@ -99,7 +105,7 @@ class ConvLSTM(nn.Module):
         xm = self.fcn(xm)
         xm = xm.view(xm.size(0), -1)
 
-        out = xa + xg + xm
+        out = xa #0.4*xa + 0.4*xg + 0.2*xm
 
         return out
 
@@ -145,9 +151,9 @@ class gcn_lstm(nn.Module):
 
     def forward(self, x, A):
 
-        #res = self.residual(x)
+        res = self.residual(x)
         x, A = self.gcn(x, A) #100 64 24 7
-        x = self.tcn(x)
+        x = self.tcn(x) + res
 
         return self.relu(x), A
 
